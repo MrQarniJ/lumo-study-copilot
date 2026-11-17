@@ -1,0 +1,2165 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lumo — AI Study Copilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  /* ===== Lumo Senior Product Design System (Impeccable Senior Editorial Spec) ===== */
+  :root {
+    /* Base Surfaces */
+    --bg-app: #FAF9F6;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F4EFE6;
+    --bg-elevated: #FFFFFF;
+    
+    /* Academic Oxford Indigo Brand */
+    --brand-indigo: #241E4E;
+    --brand-indigo-hover: #1A153A;
+    --accent-violet: #6366F1;
+    --accent-violet-bg: #EEF2FF;
+    --accent-violet-border: #C7D2FE;
+    --accent-violet-text: #3730A3;
+    
+    /* Semantic Colors (Calibrated WCAG AA Compliant on Warm Cream & Pure White) */
+    --semantic-green: #059669;
+    --semantic-green-bg: #F0FDF4;
+    --semantic-green-border: #BBF7D0;
+    --semantic-green-text: #166534;
+
+    --semantic-amber: #D97706;
+    --semantic-amber-bg: #FFFBEB;
+    --semantic-amber-border: #FDE68A;
+    --semantic-amber-text: #92400E;
+
+    --semantic-rose: #E11D48;
+    --semantic-rose-bg: #FFF1F2;
+    --semantic-rose-border: #FECDD3;
+    --semantic-rose-text: #9F1239;
+
+    /* Editorial Text Hierarchy */
+    --text-primary: #181528;
+    --text-secondary: #58536E;
+    --text-muted: #79748D;
+    
+    /* Hairline Crisp Border System */
+    --border: #E8E4DA;
+    --border-light: #F1EDE5;
+
+    /* Multi-layered Color-Matched Elevation (Ambient + Key Light) */
+    --shadow-sm: 0 1px 2px rgba(24, 21, 40, 0.04);
+    --shadow-card: 0 1px 3px rgba(24, 21, 40, 0.04), 0 6px 16px -4px rgba(24, 21, 40, 0.05);
+    --shadow-hover: 0 3px 6px rgba(24, 21, 40, 0.04), 0 12px 24px -6px rgba(24, 21, 40, 0.08);
+    --shadow-modal: 0 20px 48px -8px rgba(17, 14, 34, 0.22);
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 9999px;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: #241E4E;
+    color: #FFFFFF;
+  }
+  input, textarea, select {
+    caret-color: #241E4E;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D8D4C8; border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #BDB7A6; }
+
+  /* Tabular Numerals for Precision Metrics */
+  .tabular-nums,
+  .status-bar,
+  .stat-box-clean .num,
+  .analysis-metric-headline,
+  .banner-readiness-row,
+  .readiness-pct-label,
+  .task-time-pill,
+  .audio-duration,
+  .settings-row .val,
+  .topic-action-badge,
+  .day-lbl {
+    font-variant-numeric: tabular-nums;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0B0A10;
+    color: var(--text-primary);
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .studio-bar {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #171622;
+    border: 1px solid #282538;
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    color: #9E9AA9;
+  }
+  .studio-bar strong { color: #F7F5F0; }
+
+  /* ===== iPhone Canvas Frame ===== */
+  .device-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--bg-app);
+    border-radius: 50px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 0 12px #1A1926, 0 0 0 14px #2B293D;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 48px;
+    padding: 12px 26px 0 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    z-index: 70;
+    flex-shrink: 0;
+    background: var(--bg-app);
+  }
+  .dynamic-island {
+    width: 114px;
+    height: 28px;
+    background: #000000;
+    border-radius: 20px;
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .status-indicators {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Screens Viewport */
+  .screens-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Screen: Instant, clean, zero lag */
+  .screen {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-app);
+    position: absolute;
+    top: 0; left: 0;
+    padding: 12px 20px 130px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen.active {
+    display: block;
+  }
+  .screen::-webkit-scrollbar { width: 0; display: none; }
+
+  /* Typography & Bar */
+  .screen-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .date-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .main-heading {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin: 2px 0 0 0;
+  }
+
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #E8E3D7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-indigo);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .avatar-circle:active { transform: scale(0.95); }
+
+  .icon-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .icon-close-btn:active { transform: scale(0.94); }
+
+  /* Primary Action Button: Restrained, Subtle Tactile Press */
+  .btn-primary {
+    width: 100%;
+    height: 50px;
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(45, 39, 90, 0.15);
+    transition: background 0.12s ease, transform 0.1s ease;
+    margin-top: 20px;
+  }
+  .btn-primary:active { transform: scale(0.98); background: var(--brand-indigo-hover); }
+
+  /* Secondary Action Button (Senior Editorial Spec) */
+  .btn-secondary {
+    width: 100%;
+    height: 48px;
+    background: #FFFFFF;
+    color: var(--brand-indigo);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.1s ease;
+  }
+  .btn-secondary:active {
+    transform: scale(0.985);
+    background: #F7F5F0;
+    border-color: var(--brand-indigo);
+  }
+
+  /* Course Quick Switcher Pill Bar (Screen 1 Improvement 1.1) */
+  .course-switcher-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+  }
+  .course-switcher-bar::-webkit-scrollbar { display: none; }
+  .course-pill {
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .course-pill:active { transform: scale(0.96); }
+  .course-pill.active {
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    border-color: var(--brand-indigo);
+    box-shadow: 0 2px 6px rgba(45, 39, 90, 0.2);
+  }
+  .course-pill-add {
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    border: 1px dashed var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* Cognitive Gap Subtext in Hero Banner (Screen 1 Improvement 1.2) */
+  .banner-gap-subtext {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.82);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* Topic Filter Chips & Batch Header (Screen 2 Improvement 2.2, 2.3) */
+  .topic-filter-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin-bottom: 14px;
+  }
+  .topic-filter-bar::-webkit-scrollbar { display: none; }
+  .filter-pill {
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .filter-pill.active {
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    border-color: var(--brand-indigo);
+  }
+  .batch-review-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-violet);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.12s ease;
+  }
+  .batch-review-link:active { opacity: 0.7; }
+
+  /* Keyboard Accelerator Badge (Screen 3 Improvement 3.3) */
+  .kbd-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: var(--text-muted);
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  /* Slide Source Preview Mockup in Drawer (Screen 4 Improvement 4.1) */
+  .slide-mockup-frame {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .slide-mockup-header {
+    background: #F8F6F0;
+    border-bottom: 1px solid var(--border-light);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .slide-mockup-body {
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .slide-bullet-item {
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .slide-quote-highlight {
+    background: var(--semantic-amber-bg);
+    border: 1px solid var(--semantic-amber-border);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    margin: 8px 0;
+    font-style: normal;
+    color: var(--semantic-amber-text);
+    line-height: 1.5;
+  }
+  .highlight-callout-tag {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--semantic-amber-text);
+    margin-bottom: 2px;
+    font-style: normal;
+  }
+
+  /* Inline Audio Player Snippet (Screen 4 Improvement 4.2) */
+  .audio-player-snippet {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .audio-play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.1s ease;
+  }
+  .audio-play-btn:active { transform: scale(0.92); }
+  .audio-info { flex: 1; min-width: 0; }
+  .audio-title { font-size: 11px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .audio-waveform-bar {
+    height: 4px;
+    background: #EFECE4;
+    border-radius: 2px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+  .audio-waveform-fill {
+    height: 100%;
+    width: 38%;
+    background: var(--brand-indigo);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+  .audio-duration { font-size: 10px; font-weight: 700; color: var(--text-muted); }
+
+  /* Storage & Corpus Quota Card (Screen 7 Improvement 7.1) */
+  .storage-quota-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ===== Screen 1: Runway ===== */
+  .hero-banner-simple {
+    background: linear-gradient(145deg, #241E4E 0%, #1A153A 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 24px -4px rgba(26, 21, 58, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    color: #FFFFFF;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner-top-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+  }
+  .banner-course-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+  }
+  .banner-readiness-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 10px 0 6px 0;
+  }
+  .banner-progress-bar {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+  .banner-progress-fill {
+    height: 100%;
+    width: 68%;
+    background: #34D399;
+    border-radius: var(--radius-pill);
+    transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Animated Circular Analysis Ring (Screen 1 Focal Moment) */
+  .readiness-ring-wrap {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  .readiness-ring-wrap svg {
+    transform: rotate(-90deg);
+  }
+  .ring-fg {
+    transition: stroke-dashoffset 0.45s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+  }
+  .ring-center-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Retention Analysis & Mastery Visualization (Screen 7 Impeccable Motion) */
+  .retention-analysis-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .analysis-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .analysis-metric-headline {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--brand-indigo);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .analysis-sublabel {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .analysis-legend {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--semantic-green-text);
+  }
+  .legend-dot.green {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--semantic-green);
+  }
+  .retention-bar-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 82px;
+    padding: 6px 4px 4px 4px;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .bar-col:active { transform: scale(0.95); }
+  .bar-track-vert {
+    width: 14px;
+    height: 60px;
+    background: #F3EFE7;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill-vert {
+    width: 100%;
+    height: 0;
+    background: var(--brand-indigo);
+    border-radius: 4px;
+    transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s ease;
+  }
+  .bar-fill-vert.target {
+    background: var(--semantic-green);
+  }
+  .bar-col.active-today .bar-track-vert {
+    outline: 1.5px solid var(--brand-indigo);
+    outline-offset: 1px;
+  }
+  .bar-col:hover .bar-fill-vert,
+  .bar-col.selected .bar-fill-vert {
+    filter: brightness(1.15);
+  }
+  .day-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .bar-col.active-today .day-lbl {
+    color: var(--brand-indigo);
+    font-weight: 800;
+  }
+  .chart-active-tooltip {
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: #F8F6F0;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  /* Interactive Spaced Repetition Switcher Pill */
+  .algo-toggle-pill {
+    display: flex;
+    background: #EFECE4;
+    padding: 2px;
+    border-radius: var(--radius-pill);
+    gap: 2px;
+  }
+  .algo-opt {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+  }
+  .algo-opt.active {
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  /* Interactive Task Check States */
+  .daily-task-row.completed {
+    background: #F8F6F0;
+    border-color: #E6E1D4;
+  }
+  .daily-task-row.completed .task-num-circle {
+    background: var(--semantic-green);
+    color: #FFFFFF;
+  }
+  .daily-task-row.completed h4 {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .daily-task-row.completed .task-time-pill {
+    background: var(--semantic-green-bg);
+    color: var(--semantic-green-text);
+  }
+
+  /* prefers-reduced-motion accessibility floor */
+  @media (prefers-reduced-motion: reduce) {
+    .ring-fg,
+    .bar-fill-vert,
+    .banner-progress-fill,
+    .flashcard-3d-card,
+    .drawer-sheet {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+  .section-title-clean {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 20px 0 10px 0;
+  }
+
+  .daily-task-row {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.12s ease, transform 0.1s ease;
+  }
+  .daily-task-row:active { transform: scale(0.985); }
+  .daily-task-row.active { border-color: var(--brand-indigo); }
+  .task-num-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #F1ECE1;
+    color: var(--brand-indigo);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .daily-task-row.active .task-num-circle {
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+  }
+  .task-details { flex: 1; }
+  .task-details h4 { font-size: 14px; font-weight: 700; margin: 0; }
+  .task-details p { font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0; }
+  .task-time-pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .focus-pill-notice {
+    background: var(--semantic-rose-bg);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--semantic-rose-text);
+  }
+  .focus-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--semantic-rose);
+    flex-shrink: 0;
+  }
+
+  /* ===== Screen 2: Topics Matrix ===== */
+  .course-summary-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+  }
+  .course-summary-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 2px 0; }
+  .course-summary-card p { font-size: 12px; color: var(--text-secondary); margin: 0 0 12px 0; }
+  
+  .readiness-simple-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: #EFECE4;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 68%;
+    background: var(--brand-indigo);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .readiness-pct-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-indigo);
+  }
+
+  .topic-list-clean {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .topic-item-row {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.12s ease, transform 0.1s ease;
+  }
+  .topic-item-row:active {
+    transform: scale(0.985);
+    border-color: var(--brand-indigo);
+  }
+  .topic-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .status-indicator-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .dot-red { background: var(--semantic-rose-bg); color: var(--semantic-rose); border: 1px solid var(--semantic-rose-border); }
+  .dot-amber { background: var(--semantic-amber-bg); color: var(--semantic-amber); border: 1px solid var(--semantic-amber-border); }
+  .dot-green { background: var(--semantic-green-bg); color: var(--semantic-green); border: 1px solid var(--semantic-green-border); }
+
+  .topic-title-clean { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .topic-sub-clean { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+  .topic-action-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    text-align: right;
+  }
+  .badge-red { background: var(--semantic-rose-bg); color: var(--semantic-rose-text); border: 1px solid var(--semantic-rose-border); }
+  .badge-amber { background: var(--semantic-amber-bg); color: var(--semantic-amber-text); border: 1px solid var(--semantic-amber-border); }
+  .badge-green { background: var(--semantic-green-bg); color: var(--semantic-green-text); border: 1px solid var(--semantic-green-border); }
+
+  /* ======================================================== */
+  /* SCREEN 3: 3D CARD FLIP ANIMATION (RESTORED & REFINED)   */
+  /* ======================================================== */
+  .card-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .progress-thin-line {
+    flex: 1;
+    height: 4px;
+    background: #EAE6DC;
+    border-radius: 2px;
+    margin: 0 14px;
+    overflow: hidden;
+  }
+  .progress-thin-fill {
+    height: 100%;
+    width: 33%;
+    background: var(--brand-indigo);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* 3D Perspective Stage */
+  .flashcard-3d-stage {
+    perspective: 1000px;
+    height: 300px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .flashcard-3d-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.42s cubic-bezier(0.4, 0.2, 0, 1);
+    cursor: pointer;
+  }
+
+  /* Flip State */
+  .flashcard-3d-card.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  /* Shared Face Properties */
+  .flashcard-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Front Face */
+  .flashcard-face.front {
+    z-index: 2;
+    transform: rotateY(0deg);
+  }
+
+  /* Back Face (Pre-rotated 180deg) */
+  .flashcard-face.back {
+    transform: rotateY(180deg);
+    background: #FFFFFF;
+  }
+
+  .card-module-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-violet);
+  }
+  .card-prompt-text {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--text-primary);
+    margin: 14px 0;
+    flex: 1;
+  }
+  .card-answer-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    margin: 6px 0;
+    flex: 1;
+  }
+  .card-answer-text strong { color: var(--brand-indigo); }
+  
+  .takeaway-clean-box {
+    background: var(--accent-violet-bg);
+    border: 1px solid var(--accent-violet-border);
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--accent-violet-text);
+    margin: 10px 0;
+  }
+  .tap-flip-caption {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .citation-link-clean {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--brand-indigo);
+    background: rgba(45, 39, 90, 0.05);
+    border: 1px solid rgba(45, 39, 90, 0.12);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    transition: background 0.12s ease, transform 0.1s ease;
+  }
+  .citation-link-clean:active {
+    transform: scale(0.96);
+    background: rgba(45, 39, 90, 0.1);
+  }
+
+  /* Spaced Recall Buttons */
+  .recall-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .recall-btn {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
+  }
+  .recall-btn:hover { background: #FAF9F6; }
+  .recall-btn:active { transform: scale(0.96); }
+  .recall-btn.selected {
+    border-color: var(--brand-indigo);
+    background: #F4EFE6;
+  }
+  .recall-btn.recall-again.selected { background: var(--semantic-rose-bg); border-color: var(--semantic-rose-border); }
+  .recall-btn.recall-hard.selected { background: var(--semantic-amber-bg); border-color: var(--semantic-amber-border); }
+  .recall-btn.recall-good.selected { background: var(--semantic-green-bg); border-color: var(--semantic-green-border); }
+  .recall-btn.recall-easy.selected { background: var(--accent-violet-bg); border-color: var(--accent-violet-border); }
+  .recall-sub {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ===== Screen 6: Debrief ===== */
+  /* ===== Screen 7: Profile ===== */
+  .profile-card-clean {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 12px;
+  }
+  .profile-avatar-large {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--brand-indigo);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .profile-identity h3 { font-size: 15px; font-weight: 800; margin: 0; color: var(--text-primary); }
+  .profile-identity p { font-size: 11px; color: var(--text-secondary); margin: 2px 0 0 0; }
+
+  .profile-stats-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .stat-box-clean {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 8px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-box-clean .num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brand-indigo);
+    line-height: 1.1;
+  }
+  .stat-box-clean .lbl {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .settings-group {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .settings-row {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.1s ease;
+  }
+  .settings-row:active { background: #FAF8F4; }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-row .val { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+
+  /* Drawers */
+  .drawer-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 14, 22, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 80;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .drawer-overlay.active { display: block; opacity: 1; }
+
+  .drawer-sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    max-height: 85%;
+    background: #FAF9F6;
+    border-radius: 24px 24px 0 0;
+    box-shadow: var(--shadow-modal);
+    z-index: 90;
+    padding: 14px 20px 36px 20px;
+    overflow-y: auto;
+    transform: translateY(105%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.28s;
+  }
+  .drawer-sheet.active { 
+    transform: translateY(0); 
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .drawer-drag-pill {
+    width: 36px;
+    height: 4px;
+    background: #D8D4C8;
+    border-radius: 2px;
+    margin: 0 auto 16px auto;
+  }
+
+  /* Persistent Bottom Nav: Crisp, Instant */
+  .bottom-nav-clean {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: rgba(250, 249, 246, 0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 8px;
+    z-index: 60;
+  }
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 64px;
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .nav-btn:active { transform: scale(0.94); }
+  .nav-btn svg { stroke: var(--text-muted); }
+  .nav-btn span { font-size: 10px; font-weight: 600; }
+  .nav-btn.active { color: var(--brand-indigo); }
+  .nav-btn.active svg { stroke: var(--brand-indigo); stroke-width: 2.4; }
+  .nav-btn.active span { font-weight: 800; color: var(--brand-indigo); }
+
+</style>
+</head>
+<body>
+
+<div class="studio-bar">
+  <span>Lumo · <strong>Senior AI Product Design</strong></span>
+  <span>Authentic 3D Flip · Restrained Motion</span>
+</div>
+
+<div class="device-frame">
+  <!-- iPhone Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="dynamic-island"></div>
+    <div class="status-indicators">
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M1 9.5H3V10.5H1V9.5ZM4.5 7H6.5V10.5H4.5V7ZM8 4.5H10V10.5H8V4.5ZM11.5 1.5H13.5V10.5H11.5V1.5Z" fill="#1C1929"></path></svg>
+      <svg width="15" height="11" viewBox="0 0 16 12" fill="none"><path d="M8 2C4.5 2 1.5 3.8 0 6.5C1.5 9.2 4.5 11 8 11C11.5 11 14.5 9.2 16 6.5C14.5 3.8 11.5 2 8 2Z" fill="#1C1929" fill-opacity="0.25"></path><path d="M8 4C6.6 4 5.5 5.1 5.5 6.5C5.5 7.9 6.6 9 8 9C9.4 9 10.5 7.9 10.5 6.5C10.5 5.1 9.4 4 8 4Z" fill="#1C1929"></path></svg>
+      <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="18" height="10" rx="2.5" stroke="#1C1929"></rect><rect x="2" y="2" width="13" height="7" rx="1.5" fill="#1C1929"></rect><path d="M20 3.5V7.5" stroke="#1C1929" stroke-linecap="round"></path></svg>
+    </div>
+  </div>
+
+  <div class="screens-viewport">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: RUNWAY (CALM HOME DASHBOARD)      -->
+    <!-- ========================================== -->
+    <div class="screen active" id="screen-1">
+      <div class="screen-top-bar">
+        <div>
+          <div class="date-label">Tuesday · Nov 16</div>
+          <h1 class="main-heading">Today's Runway</h1>
+        </div>
+        <div class="avatar-circle" onclick="goTo(7)" title="Alex Morgan">AM</div>
+      </div>
+
+      <!-- Course Quick Switcher Pill Bar (Improvement 1.1) -->
+      <div class="course-switcher-bar">
+        <div class="course-pill active" id="pill-psyc" onclick="switchCourse('PSYC 101')">PSYC 101</div>
+        <div class="course-pill" id="pill-chem" onclick="switchCourse('CHEM 210')">CHEM 210</div>
+        <div class="course-pill" id="pill-neur" onclick="switchCourse('NEUR 301')">NEUR 301</div>
+        
+      </div>
+
+      <!-- Clean Exam Banner with Animated Analysis Gauge -->
+      <div class="hero-banner-simple">
+        <div class="banner-top-line">
+          <span id="banner-course-code">PSYC 101</span>
+          <span id="banner-days-left">12 DAYS LEFT</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="flex:1; padding-right:12px;">
+            <div class="banner-course-title" id="banner-course-name">Cognitive Psychology Midterm</div>
+            <div class="banner-readiness-row">
+              <span>Readiness Score</span>
+              <span style="font-weight:700;" id="home-readiness-pct">68%</span>
+            </div>
+          </div>
+          <!-- Animated Radial Ring (Analysis Focal Moment) -->
+          
+        </div>
+        <div class="banner-progress-bar" style="margin-top:10px;">
+          <div class="banner-progress-fill" id="home-bar-fill"></div>
+        </div>
+        <div class="banner-gap-subtext" id="banner-gap-text">8 topics mastered · 2 weak spots identified in Week 4</div>
+      </div>
+
+      <!-- Today's 3-Step Mission with Interactive Task Completion -->
+      <div class="section-title-clean" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>Today's Study Plan</span>
+        <span style="font-size:11px; font-weight:700; color:var(--brand-indigo);" id="plan-time-remaining">18 min remaining</span>
+      </div>
+
+      <div class="daily-task-row active" id="task-step-1" onclick="toggleTaskComplete(1, event)">
+        <div class="task-num-circle" id="task-icon-1">1</div>
+        <div class="task-details">
+          <h4>Review Operant Conditioning</h4>
+          <p>Quick summary digest</p>
+        </div>
+        <span class="task-time-pill" id="task-pill-1">2m</span>
+      </div>
+
+      <div class="daily-task-row" id="task-step-2" onclick="goTo(3)">
+        <div class="task-num-circle" id="task-icon-2">2</div>
+        <div class="task-details">
+          <h4>Active Recall Practice</h4>
+          <p>8 spaced cards due</p>
+        </div>
+        <span class="task-time-pill" id="task-pill-2">8m</span>
+      </div>
+
+      <div class="daily-task-row" id="task-step-3" onclick="goTo(3)">
+        <div class="task-num-circle" id="task-icon-3">3</div>
+        <div class="task-details">
+          <h4>Practice Verification</h4>
+          <p>5 exam practice questions</p>
+        </div>
+        <span class="task-time-pill" id="task-pill-3">8m</span>
+      </div>
+
+      <!-- Focused weak area reminder -->
+      <div class="focus-pill-notice">
+        <div class="focus-dot"></div>
+        <span>Focus topic: <strong>Reinforcement Schedules</strong> (38% confidence)</span>
+      </div>
+
+      <button class="btn-primary" onclick="goTo(3)">Start 18-Minute Mission →</button>
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- SCREEN 2: TOPICS (CLEAN, UNCLUTTERED CURRICULUM)               -->
+    <!-- ============================================================== -->
+    <div class="screen" id="screen-2">
+      <div class="screen-top-bar">
+        <div>
+          <div class="date-label">Course Topics</div>
+          <h1 class="main-heading">PSYC 101</h1>
+        </div>
+        <div class="avatar-circle" onclick="goTo(7)">AM</div>
+      </div>
+
+      <!-- Clean Course Health Card -->
+      <div class="course-summary-card">
+        <h3>Cognitive Psychology 101</h3>
+        <p>Exam in 12 days · 4 total topics</p>
+        <div class="readiness-simple-bar">
+          <div class="bar-track">
+            <div class="bar-fill" id="matrix-bar-fill"></div>
+          </div>
+          <span class="readiness-pct-label" id="matrix-pct-label">68%</span>
+        </div>
+      </div>
+
+      <!-- Filter Chips & Section Header (Improvement 2.2, 2.3) -->
+      <div class="topic-filter-bar">
+        <div class="filter-pill active" onclick="filterTopics('all', this)">All (4)</div>
+        <div class="filter-pill" onclick="filterTopics('due', this)">Due (2)</div>
+        <div class="filter-pill" onclick="filterTopics('weak', this)">Weak (1)</div>
+        <div class="filter-pill" onclick="filterTopics('mastered', this)">Mastered (1)</div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div class="section-title-clean" style="margin:0;">WEEK 4 · LEARNING &amp; COGNITION</div>
+        <span class="batch-review-link" onclick="goTo(3)">Review Due (8) →</span>
+      </div>
+
+      <!-- Topic List -->
+      <div class="topic-list-clean">
+        <!-- Topic 1: Critical Gap -->
+        <div class="topic-item-row" data-status="weak" onclick="goTo(3)">
+          <div class="topic-item-left">
+            <div class="status-indicator-dot dot-red" title="Weak Concept"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="14"></line><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+            <div>
+              <div class="topic-title-clean">Operant Conditioning</div>
+              <div class="topic-sub-clean">14 slides cited · 8 cards due</div>
+            </div>
+          </div>
+          <span class="topic-action-badge badge-red">Review (38%)</span>
+        </div>
+
+        <!-- Topic 2: Due Soon -->
+        <div class="topic-item-row" data-status="due" onclick="goTo(3)">
+          <div class="topic-item-left">
+            <div class="status-indicator-dot dot-amber" title="Due for Review"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></div>
+            <div>
+              <div class="topic-title-clean">Classical Conditioning</div>
+              <div class="topic-sub-clean">10 slides cited · Due tomorrow</div>
+            </div>
+          </div>
+          <span class="topic-action-badge badge-amber">62%</span>
+        </div>
+
+        <!-- Topic 3: Due Soon -->
+        <div class="topic-item-row" data-status="due" onclick="goTo(3)">
+          <div class="topic-item-left">
+            <div class="status-indicator-dot dot-amber" title="Due for Review"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></div>
+            <div>
+              <div class="topic-title-clean">Heuristics &amp; Biases</div>
+              <div class="topic-sub-clean">8 slides cited · Due in 2d</div>
+            </div>
+          </div>
+          <span class="topic-action-badge badge-amber">65%</span>
+        </div>
+
+        <!-- Topic 4: Mastered -->
+        <div class="topic-item-row" data-status="mastered" onclick="goTo(3)">
+          <div class="topic-item-left">
+            <div class="status-indicator-dot dot-green" title="Mastered"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div>
+              <div class="topic-title-clean">Memory Architecture</div>
+              <div class="topic-sub-clean">12 slides cited · Solid retention</div>
+            </div>
+          </div>
+          <span class="topic-action-badge badge-green">88%</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goTo(3)">Drill Operant Conditioning →</button>
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- SCREEN 3: PRACTICE (AUTHENTIC 3D FLIP CARD ANIMATION RESTORED) -->
+    <!-- ============================================================== -->
+    <div class="screen" id="screen-3">
+      <div class="card-progress-header">
+        <div class="icon-close-btn" onclick="goTo(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div class="progress-thin-line">
+          <div class="progress-thin-fill" id="card-progress-fill"></div>
+        </div>
+        <span id="card-fraction-text">4 / 12</span>
+      </div>
+
+      <!-- 3D Perspective Flashcard Container -->
+      <div class="flashcard-3d-stage">
+        <div class="flashcard-3d-card" id="flip-card-element" onclick="flipCard()">
+          
+          <!-- FRONT FACE (Question) -->
+          <div class="flashcard-face front">
+            <div class="card-module-tag" id="card-tag">Operant Conditioning · Question</div>
+            
+            <div class="card-prompt-text" id="card-prompt">
+              What is the fundamental difference between negative reinforcement and punishment?
+            </div>
+
+            <div class="tap-flip-caption">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+              <span>Tap card to reveal answer</span>
+              <span class="kbd-hint">Space</span>
+            </div>
+          </div>
+
+          <!-- BACK FACE (Answer & Grounded Citation) -->
+          <div class="flashcard-face back">
+            <div class="card-module-tag" style="color:var(--semantic-green);">Answer &amp; Grounding</div>
+            
+            <div class="card-answer-text" id="card-answer">
+              <strong>Negative reinforcement</strong> removes an unpleasant stimulus to <em>increase</em> behavior, while <strong>punishment</strong> introduces an unpleasant consequence to <em>decrease</em> it.
+            </div>
+
+            <div class="takeaway-clean-box">
+              <strong>Key point:</strong> Reinforcement always strengthens behavior; punishment always reduces it.
+            </div>
+
+            <a class="citation-link-clean" href="javascript:void(0)" onclick="openCitationDrawer(event)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10M6 10h10"></path></svg>
+              <span id="card-citation-text">Source: Slide 14 &amp; Audio 04:12</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Spaced Recall Interval Buttons (1-Tap Auto Advance) -->
+      <div class="section-title-clean" style="text-align:center; margin-top:0;">
+        <span>Rate your recall</span>
+        <span style="font-size:11px; font-weight:500; color:var(--text-muted); display:block; margin-top:2px;">Tap score to save &amp; advance</span>
+      </div>
+      <div class="recall-buttons-grid">
+        <div class="recall-btn recall-again" onclick="rateCard(this, true)">
+          <div style="display:flex; justify-content:center; align-items:center;">
+            <span style="color:var(--semantic-rose-text);">Again</span>
+            <span class="kbd-hint">1</span>
+          </div>
+          <span class="recall-sub">&lt; 1m</span>
+        </div>
+        <div class="recall-btn recall-hard" onclick="rateCard(this, true)">
+          <div style="display:flex; justify-content:center; align-items:center;">
+            <span style="color:var(--semantic-amber-text);">Hard</span>
+            <span class="kbd-hint">2</span>
+          </div>
+          <span class="recall-sub">12h</span>
+        </div>
+        <div class="recall-btn recall-good selected" onclick="rateCard(this, true)">
+          <div style="display:flex; justify-content:center; align-items:center;">
+            <span style="color:var(--semantic-green-text);">Good</span>
+            <span class="kbd-hint">3</span>
+          </div>
+          <span class="recall-sub">2d</span>
+        </div>
+        <div class="recall-btn recall-easy" onclick="rateCard(this, true)">
+          <div style="display:flex; justify-content:center; align-items:center;">
+            <span style="color:var(--brand-indigo);">Easy</span>
+            <span class="kbd-hint">4</span>
+          </div>
+          <span class="recall-sub">6d</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="nextCardStep()">Next Card →</button>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 6: SESSION DEBRIEF                  -->
+    <!-- ========================================== -->
+    <div class="screen" id="screen-6">
+      <div class="screen-top-bar">
+        <div>
+          <div class="date-label">Session Complete</div>
+          <h1 class="main-heading">18 min reviewed</h1>
+        </div>
+        <div class="icon-close-btn" onclick="goTo(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+      </div>
+
+      <div class="course-summary-card" style="padding:20px;">
+        <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Readiness Updated</div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin:8px 0 14px 0;">
+          <span style="font-size:38px; font-weight:800; color:var(--brand-indigo);">72%</span>
+          <span style="font-size:12px; font-weight:700; color:var(--semantic-green-text); background:var(--semantic-green-bg); border:1px solid var(--semantic-green-border); padding:3px 8px; border-radius:var(--radius-pill);">+4% gain</span>
+        </div>
+        <div class="readiness-simple-bar">
+          <div class="bar-track">
+            <div class="bar-fill" style="width:72%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-stats-trio">
+        <div class="stat-box-clean">
+          <div class="num">12</div>
+          <div class="lbl">Cards</div>
+        </div>
+        <div class="stat-box-clean">
+          <div class="num">92%</div>
+          <div class="lbl">Accuracy</div>
+        </div>
+        <div class="stat-box-clean">
+          <div class="num">3d</div>
+          <div class="lbl">Streak</div>
+        </div>
+      </div>
+
+      <div class="course-summary-card">
+        <h4 style="margin:0 0 4px 0; font-size:14px;">Next review scheduled</h4>
+        <p style="margin:0; font-size:12px; color:var(--text-secondary);">Tomorrow at 9:00 AM · 8 cards from Classical Conditioning</p>
+      </div>
+
+      <!-- Dual Path Actions (Improvement 6.1) -->
+      <button class="btn-secondary" style="margin-top:14px; margin-bottom:8px;" onclick="goTo(3)">Review 2 Stumbled Cards (3 min) →</button>
+      <button class="btn-primary" style="margin-top:0;" onclick="goTo(1)">Back to Runway</button>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 7: PROFILE                          -->
+    <!-- ========================================== -->
+    <div class="screen" id="screen-7">
+      <div class="screen-top-bar">
+        <div>
+          <div class="date-label">Account</div>
+          <h1 class="main-heading">Profile</h1>
+        </div>
+        <div class="icon-close-btn" onclick="goTo(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+      </div>
+
+      <div class="profile-card-clean">
+        <div class="profile-avatar-large">AM</div>
+        <div class="profile-identity">
+          <h3>Alex Morgan</h3>
+          <p>Cognitive Science · Year 2</p>
+        </div>
+      </div>
+
+      <div class="profile-stats-trio">
+        <div class="stat-box-clean">
+          <div class="num" id="profile-stat-days">12</div>
+          <div class="lbl">Days to Exam</div>
+        </div>
+        <div class="stat-box-clean">
+          <div class="num" id="profile-avg-rate">68%</div>
+          <div class="lbl">Avg Readiness</div>
+        </div>
+        <div class="stat-box-clean">
+          <div class="num" id="profile-stat-streak">3</div>
+          <div class="lbl">Day Streak</div>
+        </div>
+      </div>
+
+      <!-- 7-Day Cognitive Retention & Velocity Analysis (Animated Chart) -->
+      <div class="section-title-clean" style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+        <span>Cognitive Retention Analysis</span>
+        <span style="font-size:11px; font-weight:700; color:var(--semantic-green-text); background:var(--semantic-green-bg); border:1px solid var(--semantic-green-border); padding:2px 8px; border-radius:var(--radius-pill);">+6% this week</span>
+      </div>
+
+      <div class="retention-analysis-card">
+        <div class="analysis-header-row">
+          <div>
+            <div class="analysis-metric-headline" id="profile-headline-retention">88.4%</div>
+            <div class="analysis-sublabel">7-day active recall accuracy</div>
+          </div>
+          <div class="analysis-legend">
+            <span class="legend-dot green"></span> <span>Target (&gt;85%)</span>
+          </div>
+        </div>
+
+        <!-- 7-Day Velocity Bar Graph -->
+        <div class="retention-bar-chart">
+          <div class="bar-col" onclick="inspectDay('Monday', '68%', 18, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:68%;" data-h="68%"></div></div>
+            <span class="day-lbl">M</span>
+          </div>
+          <div class="bar-col" onclick="inspectDay('Tuesday', '76%', 24, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:76%;" data-h="76%"></div></div>
+            <span class="day-lbl">T</span>
+          </div>
+          <div class="bar-col" onclick="inspectDay('Wednesday', '84%', 30, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:84%;" data-h="84%"></div></div>
+            <span class="day-lbl">W</span>
+          </div>
+          <div class="bar-col" onclick="inspectDay('Thursday', '92%', 28, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:92%;" data-h="92%"></div></div>
+            <span class="day-lbl">T</span>
+          </div>
+          <div class="bar-col" onclick="inspectDay('Friday', '78%', 16, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:78%;" data-h="78%"></div></div>
+            <span class="day-lbl">F</span>
+          </div>
+          <div class="bar-col" onclick="inspectDay('Saturday', '88%', 32, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert" style="height:88%;" data-h="88%"></div></div>
+            <span class="day-lbl">S</span>
+          </div>
+          <div class="bar-col active-today selected" onclick="inspectDay('Sunday (Today)', '94%', 36, this)">
+            <div class="bar-track-vert"><div class="bar-fill-vert target" style="height:94%;" data-h="94%"></div></div>
+            <span class="day-lbl">S</span>
+          </div>
+        </div>
+
+        <div class="chart-active-tooltip" id="chart-tooltip">
+          Sunday (Today): <strong>94% recall</strong> · 36 cards reviewed
+        </div>
+      </div>
+
+      <div class="section-title-clean">Enrolled Courses</div>
+      <div class="settings-group">
+        <div class="settings-row" onclick="goTo(2)">
+          <span>PSYC 101 — Cognitive Psychology</span>
+          <span class="val">12d left · 68%</span>
+        </div>
+        <div class="settings-row">
+          <span>CHEM 210 — Organic Chemistry</span>
+          <span class="val">24d left · 52%</span>
+        </div>
+        <div class="settings-row">
+          <span>NEUR 301 — Cellular Neuroscience</span>
+          <span class="val">36d left · 84%</span>
+        </div>
+      </div>
+
+      <!-- Verified Study Corpus & Storage (Improvement 7.1) -->
+      <div class="section-title-clean">Verified Study Corpus</div>
+      <div class="storage-quota-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:13px; font-weight:700; color:var(--text-primary);">18 PDF Decks · 4 Audio Tracks</span>
+          <span style="font-size:11px; font-weight:700; color:var(--semantic-green-text); background:var(--semantic-green-bg); border:1px solid var(--semantic-green-border); padding:2px 8px; border-radius:var(--radius-pill);">100% Grounded</span>
+        </div>
+        <div class="bar-track" style="height:5px; margin-bottom:8px;">
+          <div class="bar-fill" id="storage-bar-fill" style="width:42%; background:var(--brand-indigo);"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+          <span>2.4 GB offline cached</span>
+          <span>Zero Hallucinations</span>
+        </div>
+      </div>
+
+      <div class="section-title-clean">Study Settings &amp; ALM</div>
+      <div class="settings-group">
+        <div class="settings-row" onclick="toggleAlgorithm()">
+          <div>
+            <div>Spaced Algorithm</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;" id="algo-subtext">Modern FSRS · Optimal memory decay curve</div>
+          </div>
+          <div class="algo-toggle-pill" id="algo-pill">
+            <span class="algo-opt active" id="algo-fsrs">FSRS</span>
+            <span class="algo-opt" id="algo-sm2">SM-2</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span>Study Reminders</span>
+          <span class="val">Daily at 9:00 AM</span>
+        </div>
+        <div class="settings-row" onclick="alert('Exporting 142 flashcards to Anki .apkg format...')">
+          <span>Export to Anki / Markdown</span>
+          <span class="val">Download .apkg →</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goTo(1)">Return to Runway</button>
+    </div>
+
+  </div> <!-- End Viewport -->
+
+
+  <!-- ========================================== -->
+  <!-- SOURCE CITATION DRAWER                     -->
+  <!-- ========================================== -->
+  <div class="drawer-overlay" id="overlay-citation" onclick="closeCitationDrawer()"></div>
+  <div class="drawer-sheet" id="sheet-citation">
+    <div class="drawer-drag-pill"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div>
+        <div class="date-label">Source Citation</div>
+        <h3 style="font-size:17px; font-weight:800; margin:2px 0 0 0;">Slide 14 · Operant Conditioning</h3>
+      </div>
+      <div class="icon-close-btn" onclick="closeCitationDrawer()">×</div>
+    </div>
+
+    <!-- Authentic Slide Preview Mockup (Improvement 4.1) -->
+    <div class="slide-mockup-frame">
+      <div class="slide-mockup-header">
+        <span id="drawer-slide-deck">Week4_Lecture_Slides.pdf</span>
+        <span class="slide-page-badge" style="background:var(--border-light); padding:2px 8px; border-radius:var(--radius-pill); font-size:10px;">Slide 14 / 32</span>
+      </div>
+      <div class="slide-mockup-body">
+        <div class="slide-bullet-item">1. Thorndike's Law of Effect (1898)</div>
+        <div class="slide-quote-highlight">
+          <div class="highlight-callout-tag">VERBATIM CITED PASSAGE</div>
+          <span id="drawer-quote-text">“Reinforcement increases the frequency of a behavior (negative = removal of aversive stimuli). Punishment decreases behavior frequency.”</span>
+        </div>
+        <div class="slide-bullet-item">3. Skinner Box Experimental Models (1938)</div>
+      </div>
+    </div>
+
+    <!-- Inline 10-Second Lecture Audio Snippet (Improvement 4.2) -->
+    <div class="audio-player-snippet">
+      <button class="audio-play-btn" id="audio-play-btn" onclick="toggleAudioPreview()">
+        <svg id="audio-play-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-title" id="drawer-audio-title">Lecture 4 Audio · Prof. Vance</div>
+        <div class="audio-waveform-bar">
+          <div class="audio-waveform-fill" id="audio-wave-fill"></div>
+        </div>
+      </div>
+      <span class="audio-duration" id="audio-time-label">0:12 / 0:30</span>
+    </div>
+
+    <div style="display:flex; gap:8px;">
+      <button class="btn-secondary" style="flex:1;" onclick="alert('Opening slide deck viewer...')">View Full Deck</button>
+      <button class="btn-primary" style="flex:1; margin-top:0;" onclick="closeCitationDrawer()">Back to Card</button>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- PERSISTENT 4-TAB NAVIGATION BAR            -->
+  <!-- ========================================== -->
+  <nav class="bottom-nav-clean">
+    <div class="nav-btn active" id="tab-runway" onclick="goTo(1)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Runway</span>
+    </div>
+
+    <div class="nav-btn" id="tab-matrix" onclick="goTo(2)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Topics</span>
+    </div>
+
+    <div class="nav-btn" id="tab-practice" onclick="goTo(3)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>Practice</span>
+    </div>
+
+    <div class="nav-btn" id="tab-profile" onclick="goTo(7)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Profile</span>
+    </div>
+  </nav>
+
+</div> <!-- End Device Frame -->
+
+<script>
+  let activeScreen = 1;
+
+  // Authentic Exponential Easing Number Counter
+  function animateCounter(el, start, end, duration, suffix = '', prefix = '') {
+    if (!el) return;
+    const startTime = performance.now();
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Exponential deceleration curve: 1 - Math.pow(2, -10 * progress)
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const currentVal = (start + (end - start) * ease).toFixed(suffix.includes('.') ? 1 : 0);
+      el.textContent = `${prefix}${currentVal}${suffix}`;
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  function goTo(screenNum) {
+    if (activeScreen === screenNum) return;
+    activeScreen = screenNum;
+    
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-' + screenNum);
+    if (target) {
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if (screenNum === 1) {
+      document.getElementById('tab-runway')?.classList.add('active');
+      animateHomeReadiness();
+    } else if (screenNum === 2) {
+      document.getElementById('tab-matrix')?.classList.add('active');
+    } else if (screenNum === 3) {
+      document.getElementById('tab-practice')?.classList.add('active');
+    } else if (screenNum === 7) {
+      document.getElementById('tab-profile')?.classList.add('active');
+      animateProfileAnalytics();
+    }
+  }
+
+  // Course Quick Switcher Engine with Metric Morphing (Improvement 1.1)
+  const courseData = {
+    'PSYC 101': { name: 'Cognitive Psychology Midterm', days: '12 DAYS LEFT', readiness: 68, gap: '8 topics mastered · 2 weak spots identified in Week 4' },
+    'CHEM 210': { name: 'Organic Chemistry Reactions', days: '24 DAYS LEFT', readiness: 52, gap: '5 reaction mechanisms due · Week 6 Alkenes' },
+    'NEUR 301': { name: 'Cellular Neuroscience Exam', days: '36 DAYS LEFT', readiness: 84, gap: '14 topics mastered · High retention' }
+  };
+
+  function switchCourse(code) {
+    document.querySelectorAll('.course-pill').forEach(p => p.classList.remove('active'));
+    if (code === 'PSYC 101') document.getElementById('pill-psyc')?.classList.add('active');
+    else if (code === 'CHEM 210') document.getElementById('pill-chem')?.classList.add('active');
+    else if (code === 'NEUR 301') document.getElementById('pill-neur')?.classList.add('active');
+
+    const data = courseData[code];
+    if (data) {
+      document.getElementById('banner-course-code').textContent = code;
+      document.getElementById('banner-days-left').textContent = data.days;
+      document.getElementById('banner-course-name').textContent = data.name;
+      
+      const currentVal = parseInt(document.getElementById('home-readiness-pct').textContent) || 68;
+      animateCounter(document.getElementById('home-readiness-pct'), currentVal, data.readiness, 350, '%');
+      animateCounter(document.getElementById('home-ring-text'), currentVal, data.readiness, 350, '%');
+
+      // Update SVG Ring dashoffset (circumference 125.66)
+      const ringFg = document.getElementById('home-ring-fg');
+      if (ringFg) {
+        const offset = 125.66 * (1 - (data.readiness / 100));
+        ringFg.style.strokeDashoffset = offset;
+        ringFg.style.stroke = data.readiness >= 75 ? '#34D399' : (data.readiness >= 60 ? '#F59E0B' : '#F43F5E');
+      }
+
+      document.getElementById('home-bar-fill').style.width = `${data.readiness}%`;
+
+      // Smooth Cross-fade for Gap Summary
+      const gapEl = document.getElementById('banner-gap-text');
+      if (gapEl) {
+        gapEl.style.opacity = '0';
+        setTimeout(() => {
+          gapEl.textContent = data.gap;
+          gapEl.style.opacity = '1';
+        }, 140);
+      }
+    }
+  }
+
+  function animateHomeReadiness() {
+    const ringFg = document.getElementById('home-ring-fg');
+    if (ringFg) {
+      ringFg.style.strokeDashoffset = '125.66';
+      setTimeout(() => {
+        ringFg.style.strokeDashoffset = '40.21'; // 68%
+      }, 50);
+    }
+  }
+
+  // Task Completion State Management
+  let task1Done = false;
+  function toggleTaskComplete(stepNum, e) {
+    if (e) e.stopPropagation();
+    task1Done = !task1Done;
+    const row = document.getElementById('task-step-1');
+    const icon = document.getElementById('task-icon-1');
+    const pill = document.getElementById('task-pill-1');
+    const timeRem = document.getElementById('plan-time-remaining');
+
+    if (task1Done) {
+      row.classList.add('completed');
+      icon.innerHTML = '✔';
+      pill.textContent = 'Done';
+      timeRem.textContent = '16 min remaining';
+    } else {
+      row.classList.remove('completed');
+      icon.innerHTML = '1';
+      pill.textContent = '2m';
+      timeRem.textContent = '18 min remaining';
+    }
+  }
+
+  // Profile Cognitive Analytics Animation & Inspection
+  function animateProfileAnalytics() {
+    const daysEl = document.getElementById('profile-stat-days');
+    const rateEl = document.getElementById('profile-avg-rate');
+    const streakEl = document.getElementById('profile-stat-streak');
+    const headlineEl = document.getElementById('profile-headline-retention');
+
+    animateCounter(daysEl, 0, 12, 380);
+    animateCounter(rateEl, 0, 68, 420, '%');
+    animateCounter(streakEl, 0, 3, 300);
+    animateCounter(headlineEl, 72, 88.4, 450, '%');
+
+    // Staggered Vertical Bar Growth
+    const bars = document.querySelectorAll('.bar-fill-vert');
+    bars.forEach((b, i) => {
+      b.style.height = '0%';
+      const targetH = b.getAttribute('data-h') || '75%';
+      setTimeout(() => {
+        b.style.height = targetH;
+      }, 60 + i * 40);
+    });
+  }
+
+  function inspectDay(day, rate, cards, col) {
+    document.querySelectorAll('.bar-col').forEach(c => c.classList.remove('selected'));
+    if (col) col.classList.add('selected');
+
+    const tooltip = document.getElementById('chart-tooltip');
+    if (tooltip) {
+      tooltip.style.opacity = '0.5';
+      setTimeout(() => {
+        tooltip.innerHTML = `${day}: <strong>${rate} recall</strong> · ${cards} cards reviewed`;
+        tooltip.style.opacity = '1';
+      }, 80);
+    }
+  }
+
+  // Spaced Algorithm Toggle (FSRS vs SM-2)
+  let currentAlgo = 'FSRS';
+  function toggleAlgorithm() {
+    currentAlgo = currentAlgo === 'FSRS' ? 'SM-2' : 'FSRS';
+    const fsrsBtn = document.getElementById('algo-fsrs');
+    const sm2Btn = document.getElementById('algo-sm2');
+    const subtext = document.getElementById('algo-subtext');
+    const headline = document.getElementById('profile-headline-retention');
+
+    if (currentAlgo === 'FSRS') {
+      fsrsBtn.classList.add('active');
+      sm2Btn.classList.remove('active');
+      subtext.textContent = 'Modern FSRS · Optimal memory decay curve (+35% time saved)';
+      animateCounter(headline, 79.2, 88.4, 350, '%');
+    } else {
+      fsrsBtn.classList.remove('active');
+      sm2Btn.classList.add('active');
+      subtext.textContent = 'Traditional SuperMemo-2 · Fixed factor intervals';
+      animateCounter(headline, 88.4, 79.2, 350, '%');
+    }
+  }
+
+  // Topic Filtering Engine (Improvement 2.3)
+  function filterTopics(status, pill) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    if (pill) pill.classList.add('active');
+
+    document.querySelectorAll('.topic-item-row').forEach(row => {
+      const rowStatus = row.getAttribute('data-status');
+      if (status === 'all' || rowStatus === status) {
+        row.style.display = 'flex';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // Interactive 3D Flashcards Deck
+  const cards = [
+    {
+      q: "What is the fundamental difference between negative reinforcement and punishment?",
+      a: "<strong>Negative reinforcement</strong> removes an unpleasant stimulus to <em>increase</em> behavior, while <strong>punishment</strong> introduces an unpleasant consequence to <em>decrease</em> it.",
+      takeaway: "Reinforcement always strengthens behavior; punishment always reduces it.",
+      tag: "Operant Conditioning · Question",
+      citation: "Source: Slide 14 & Audio 04:12"
+    },
+    {
+      q: "Which schedule of reinforcement produces the highest resistance to extinction?",
+      a: "<strong>Variable-Ratio (VR)</strong> schedule, because reward delivery is unpredictable yet tied directly to number of responses.",
+      takeaway: "Variable-ratio yields steady response rates with minimal pauses.",
+      tag: "Reinforcement Schedules · Question",
+      citation: "Source: Slide 18 & Audio 12:45"
+    },
+    {
+      q: "How does 'shaping' work in behavioral psychology?",
+      a: "<strong>Shaping</strong> selectively reinforces progressive approximations toward a complex target behavior until full fluency is achieved.",
+      takeaway: "Reward incremental progress rather than demanding full behavior upfront.",
+      tag: "Behavioral Shaping · Question",
+      citation: "Source: Slide 22 & Audio 19:30"
+    }
+  ];
+
+  let cardIdx = 0;
+
+  // Authentic 3D Card Flip
+  function flipCard() {
+    const card = document.getElementById('flip-card-element');
+    card.classList.toggle('is-flipped');
+  }
+
+  // 1-Tap Auto-Advancing Spaced Rating (Improvement 3.1)
+  function rateCard(btn, autoAdvance = true) {
+    document.querySelectorAll('.recall-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+
+    const card = document.getElementById('flip-card-element');
+    const isFlipped = card.classList.contains('is-flipped');
+
+    // If card is showing answer, automatically advance after a tactile 240ms pause
+    if (autoAdvance && isFlipped) {
+      setTimeout(() => {
+        nextCardStep();
+      }, 240);
+    }
+  }
+
+  function nextCardStep() {
+    const card = document.getElementById('flip-card-element');
+    
+    // Always unflip to show the front question when stepping to next card
+    card.classList.remove('is-flipped');
+
+    cardIdx++;
+    if (cardIdx >= cards.length) {
+      cardIdx = 0;
+      // Update global readiness
+      document.getElementById('home-readiness-pct').textContent = '72%';
+      document.getElementById('home-bar-fill').style.width = '72%';
+      document.getElementById('matrix-pct-label').textContent = '72%';
+      document.getElementById('matrix-bar-fill').style.width = '72%';
+      document.getElementById('profile-avg-rate').textContent = '72%';
+      goTo(6);
+      return;
+    }
+
+    setTimeout(() => {
+      document.getElementById('card-prompt').innerHTML = cards[cardIdx].q;
+      document.getElementById('card-answer').innerHTML = cards[cardIdx].a;
+      document.getElementById('card-tag').textContent = cards[cardIdx].tag;
+      document.getElementById('card-citation-text').textContent = cards[cardIdx].citation;
+      document.getElementById('card-fraction-text').textContent = `${cardIdx + 4} / 12`;
+      document.getElementById('card-progress-fill').style.width = `${((cardIdx + 1) / cards.length) * 100}%`;
+      // Reset selected rating state for new card
+      document.querySelectorAll('.recall-btn').forEach(b => b.classList.remove('selected'));
+    }, 120);
+  }
+
+  // Drawers
+  function openCitationDrawer(e) {
+    if (e) e.stopPropagation(); // Avoid triggering card flip
+    document.getElementById('overlay-citation').classList.add('active');
+    document.getElementById('sheet-citation').classList.add('active');
+  }
+  function closeCitationDrawer() {
+    document.getElementById('overlay-citation').classList.remove('active');
+    document.getElementById('sheet-citation').classList.remove('active');
+  }
+
+  // Audio Snippet Player Simulation (Improvement 4.2)
+  let isPlayingAudio = false;
+  function toggleAudioPreview() {
+    isPlayingAudio = !isPlayingAudio;
+    const wave = document.getElementById('audio-wave-fill');
+    const timeLbl = document.getElementById('audio-time-label');
+    const icon = document.getElementById('audio-play-icon');
+
+    if (isPlayingAudio) {
+      icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      wave.style.width = '75%';
+      timeLbl.textContent = '0:22 / 0:30';
+    } else {
+      icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+      wave.style.width = '38%';
+      timeLbl.textContent = '0:12 / 0:30';
+    }
+  }
+
+  // Global Keyboard Shortcuts (Improvement 3.3)
+  window.addEventListener('keydown', (e) => {
+    // Esc closes drawers
+    if (e.key === 'Escape') {
+      closeCitationDrawer();
+      return;
+    }
+    // Practice shortcuts on Screen 3
+    if (activeScreen === 3) {
+      const card = document.getElementById('flip-card-element');
+      const isFlipped = card?.classList.contains('is-flipped');
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        flipCard();
+      } else if (isFlipped && (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4')) {
+        const btns = document.querySelectorAll('.recall-btn');
+        const idx = parseInt(e.key) - 1;
+        if (btns[idx]) {
+          rateCard(btns[idx], true);
+        }
+      } else if (isFlipped && e.key === 'ArrowRight') {
+        nextCardStep();
+      }
+    }
+  });
+
+  // Hash router for direct screen captures
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    if (hash === '#screen-2') goTo(2);
+    else if (hash === '#screen-3') goTo(3);
+    else if (hash === '#screen-3-back') {
+      goTo(3);
+      const card = document.getElementById('flip-card-element');
+      if (card) {
+        card.style.transition = 'none';
+        card.classList.add('is-flipped');
+        setTimeout(() => { card.style.transition = ''; }, 50);
+      }
+    }
+    else if (hash === '#screen-4') { goTo(3); setTimeout(openCitationDrawer, 100); }
+    else if (hash === '#screen-6') goTo(6);
+    else if (hash === '#screen-7') {
+      goTo(7);
+      setTimeout(animateProfileAnalytics, 150);
+    } else {
+      animateHomeReadiness();
+    }
+  });
+</script>
+
+
+
+</body></html>
