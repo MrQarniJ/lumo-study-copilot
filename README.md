@@ -2,9 +2,16 @@
 
 > An evidence-based, calm, and distraction-free mobile study companion engineered around cognitive load theory, modern spaced repetition (FSRS / SM-2), and verbatim grounded slide/audio citations.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat&logo=vercel)](https://vercel.com)
+[![Deployed on Vercel](https://img.shields.io/badge/Vercel-Live_App-black?style=flat&logo=vercel)](https://lumo-study-copilot.vercel.app)
 [![Design System](https://img.shields.io/badge/Design_System-Impeccable-241E4E?style=flat)](https://github.com/loftvoxelstudio-cmd/lumo-study-copilot)
 [![Accessibility](https://img.shields.io/badge/WCAG_2.1-AA_Compliant-059669?style=flat)](https://www.w3.org/WAI/WCAG21/quickref/)
+
+---
+
+## 🔗 Live Application Links
+
+- **Live Production App**: **[https://lumo-study-copilot.vercel.app](https://lumo-study-copilot.vercel.app)**
+- **GitHub Repository**: **[https://github.com/loftvoxelstudio-cmd/lumo-study-copilot](https://github.com/loftvoxelstudio-cmd/lumo-study-copilot)**
 
 ---
 
