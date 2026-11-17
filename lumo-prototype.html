@@ -1211,41 +1211,35 @@
 
   /* ===== Product Tour ===== */
 
-  /* Tour FAB — appears after splash */
-  #tour-fab {
-    position: absolute;
-    bottom: 100px;
-    right: 18px;
-    z-index: 8000;
+  /* Tour inline banner — lives inside screen-1 content, no overlap */
+  #tour-banner {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--brand-indigo);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  #tour-banner.visible {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #tour-banner.hidden { display: none !important; }
+  .tour-banner-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: var(--brand-indigo);
-    color: #FAF9F6;
-    border: none;
-    border-radius: var(--radius-pill);
-    padding: 10px 16px 10px 12px;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(36, 30, 78, 0.38), 0 1px 4px rgba(36, 30, 78, 0.18);
-    opacity: 0;
-    transform: translateY(10px) scale(0.92);
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.18s ease;
-    pointer-events: none;
+    gap: 9px;
+    flex: 1;
+    min-width: 0;
   }
-  #tour-fab.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: all;
-  }
-  #tour-fab.hidden { display: none; }
-  #tour-fab:active { transform: scale(0.95); }
-  #tour-fab:hover { box-shadow: 0 6px 20px rgba(36,30,78,0.44), 0 2px 6px rgba(36,30,78,0.2); }
-  #tour-fab svg { flex-shrink: 0; }
-  .tour-fab-pulse {
-    width: 7px; height: 7px; border-radius: 50%;
+  .tour-banner-pulse {
+    width: 8px; height: 8px; border-radius: 50%;
     background: #6EE7B7;
     flex-shrink: 0;
     animation: tourFabPulse 2s ease-in-out infinite;
@@ -1253,6 +1247,44 @@
   @keyframes tourFabPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50%       { opacity: 0.5; transform: scale(0.7); }
+  }
+  .tour-banner-text {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(250,249,246,0.82);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tour-banner-text strong {
+    color: #FAF9F6;
+    font-weight: 800;
+  }
+  .tour-banner-btn {
+    flex-shrink: 0;
+    background: rgba(250,249,246,0.14);
+    border: 1px solid rgba(250,249,246,0.22);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FAF9F6;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .tour-banner-btn:hover { background: rgba(250,249,246,0.22); }
+  .tour-banner-btn:active { transform: scale(0.96); }
+  .tour-banner-dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(250,249,246,0.45);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 4px;
   }
 
   /* Tour Overlay — dim + spotlight */
@@ -1416,8 +1448,7 @@
 
   /* Mobile adjustments for tour */
   @media (max-width: 500px) {
-    #tour-fab { bottom: 88px; }
-    #tour-tooltip { width: calc(100vw - 36px); left: 18px !important; }
+    #tour-tooltip { width: calc(100vw - 32px); left: 16px !important; }
     #tour-done-toast { bottom: 90px; }
   }
 
@@ -1546,12 +1577,6 @@
     </div>
   </div>
 
-  <!-- ===== Tour FAB ===== -->
-  <button id="tour-fab" aria-label="Start tour" onclick="startTour()">
-    <div class="tour-fab-pulse"></div>
-    Take a Tour
-  </button>
-
   <!-- ===== Tour Overlay ===== -->
   <div id="tour-overlay">
     <!-- SVG dim mask with spotlight cutout -->
@@ -1600,6 +1625,17 @@
     <!-- SCREEN 1: RUNWAY (CALM HOME DASHBOARD)      -->
     <!-- ========================================== -->
     <div class="screen active" id="screen-1">
+
+      <!-- Tour inline banner — no overlap with nav -->
+      <div id="tour-banner">
+        <div class="tour-banner-left">
+          <div class="tour-banner-pulse"></div>
+          <span class="tour-banner-text"><strong>New here?</strong> See what Lumo can do</span>
+        </div>
+        <button class="tour-banner-btn" onclick="startTour()">Take Tour</button>
+        <button class="tour-banner-dismiss" onclick="dismissTourBanner()" aria-label="Dismiss">×</button>
+      </div>
+
       <div class="screen-top-bar">
         <div>
           <div class="date-label">Tuesday · Nov 16</div>
@@ -2495,13 +2531,8 @@
         splash.classList.add('fade-out');
         setTimeout(() => {
           splash.classList.add('hidden');
-          // Show tour FAB after splash is gone (only on first visit)
-          if (!sessionStorage.getItem('lumo-tour-done')) {
-            const fab = document.getElementById('tour-fab');
-            if (fab) {
-              setTimeout(() => fab.classList.add('visible'), 300);
-            }
-          }
+          // Show tour banner in screen-1 after splash (first visit only)
+          showTourBanner();
         }, 600);
       }, 1900);
     }
@@ -2530,13 +2561,247 @@
   });
 
   // ============================================================
-  // LUMO PRODUCT TOUR ENGINE
+  // LUMO PRODUCT TOUR ENGINE  v2  — multi-screen, no overlap
   // ============================================================
 
+  // Each step: screen to navigate to, element to spotlight, tooltip content
   const TOUR_STEPS = [
     {
-      target: '.screen-top-bar',         // "Today's Runway" heading area
-      title: "Welcome to Lumo ✦",
+      screen: 1,
+      target: '.hero-banner-simple',
+      title: "Your AI Readiness Score",
+      body: "Lumo analyses your study history and shows exactly how prepared you are for each exam — updated after every session.",
+      caretPos: 'top', pad: 10,
+    },
+    {
+      screen: 1,
+      target: '.course-switcher-bar',
+      title: "Switch Courses Instantly",
+      body: "Tap any pill to switch between your courses. The dashboard, readiness score, and study plan all update in one tap.",
+      caretPos: 'top', pad: 8,
+    },
+    {
+      screen: 1,
+      target: '#task-step-1',
+      title: "Today's Study Plan",
+      body: "Three AI-curated tasks, optimised by spaced repetition. Tap a task to mark it done — your time remaining counts down live.",
+      caretPos: 'top', pad: 8,
+    },
+    {
+      screen: 3,
+      target: '.flip-card-stage',
+      title: "Active Recall Flashcards",
+      body: "Tap the card to flip it. Rate yourself — Again, Hard, Good, or Easy — and Lumo's FSRS algorithm reschedules it perfectly.",
+      caretPos: 'top', pad: 10,
+    },
+    {
+      screen: 6,
+      target: '.screen-top-bar',
+      title: "Deep Analysis Dashboard",
+      body: "See your recall rate chart, weak topics, and mastery breakdown. Lumo pinpoints exactly what to study next.",
+      caretPos: 'top', pad: 8,
+    },
+    {
+      screen: 7,
+      target: '.profile-stats-row, .stat-row-clean',
+      title: "Your Study Profile",
+      body: "Track your streak, total cards studied, hours logged, and mastery per course — all in one clean view.",
+      caretPos: 'top', pad: 8,
+    },
+  ];
+
+  let tourStep = 0;
+  let tourActive = false;
+
+  // Show tour banner after splash (first visit this session)
+  function showTourBanner() {
+    if (sessionStorage.getItem('lumo-tour-done')) return;
+    const banner = document.getElementById('tour-banner');
+    if (!banner) return;
+    // Use rAF to trigger CSS transition after display:flex
+    requestAnimationFrame(() => {
+      banner.style.display = 'flex';
+      requestAnimationFrame(() => banner.classList.add('visible'));
+    });
+  }
+
+  function dismissTourBanner() {
+    const banner = document.getElementById('tour-banner');
+    if (!banner) return;
+    banner.classList.remove('visible');
+    setTimeout(() => banner.classList.add('hidden'), 400);
+    sessionStorage.setItem('lumo-tour-done', '1');
+  }
+
+  function startTour() {
+    tourActive = true;
+    tourStep = 0;
+    // Hide banner
+    const banner = document.getElementById('tour-banner');
+    if (banner) { banner.classList.remove('visible'); banner.classList.add('hidden'); }
+    // Build dots
+    buildTourDots();
+    // Show overlay
+    document.getElementById('tour-overlay').classList.add('active');
+    // Go to first step's screen, then show step
+    navigateAndShow(0);
+  }
+
+  function buildTourDots() {
+    const container = document.getElementById('tour-dots');
+    container.innerHTML = '';
+    TOUR_STEPS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'tour-dot' + (i === 0 ? ' active' : '');
+      container.appendChild(d);
+    });
+  }
+
+  function updateTourDots(idx) {
+    document.querySelectorAll('.tour-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  function navigateAndShow(idx) {
+    const step = TOUR_STEPS[idx];
+    if (!step) return;
+    // Navigate to the right screen
+    goTo(step.screen);
+    // Wait for DOM to settle then render spotlight
+    setTimeout(() => showTourStep(idx), 160);
+  }
+
+  function showTourStep(idx) {
+    const step = TOUR_STEPS[idx];
+    if (!step) return;
+
+    const frame = document.querySelector('.device-frame');
+    // Try multiple selectors (comma-separated = use first match)
+    let el = null;
+    const selectors = step.target.split(',').map(s => s.trim());
+    for (const sel of selectors) {
+      el = frame ? frame.querySelector(sel) : document.querySelector(sel);
+      if (el) break;
+    }
+
+    // Update tooltip content
+    document.getElementById('tour-badge').textContent = `${idx + 1} of ${TOUR_STEPS.length}`;
+    document.getElementById('tour-title').textContent = step.title;
+    document.getElementById('tour-body').textContent  = step.body;
+
+    const nextBtn = document.getElementById('tour-next-btn');
+    nextBtn.textContent = idx === TOUR_STEPS.length - 1 ? 'Done ✓' : 'Next →';
+
+    updateTourDots(idx);
+
+    const tooltip = document.getElementById('tour-tooltip');
+    tooltip.className = 'caret-' + step.caretPos + ' entering';
+    setTimeout(() => tooltip.classList.remove('entering'), 420);
+
+    if (el) {
+      positionSpotlight(el, step.pad);
+      positionTooltip(el, step.caretPos, step.pad);
+    } else {
+      clearSpotlight();
+      // Centre tooltip if no target found
+      const fRect = frame.getBoundingClientRect();
+      tooltip.style.left = '14px';
+      tooltip.style.top  = Math.round(fRect.height * 0.38 - 90) + 'px';
+    }
+  }
+
+  function positionSpotlight(el, pad = 8) {
+    const frame = document.querySelector('.device-frame');
+    const frameRect = frame.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const x = elRect.left - frameRect.left - pad;
+    const y = elRect.top  - frameRect.top  - pad;
+    const w = elRect.width  + pad * 2;
+    const h = elRect.height + pad * 2;
+    const hole = document.getElementById('tour-spotlight-hole');
+    hole.setAttribute('x',      Math.max(0, x));
+    hole.setAttribute('y',      Math.max(0, y));
+    hole.setAttribute('width',  w);
+    hole.setAttribute('height', h);
+    hole.setAttribute('rx',     '12');
+  }
+
+  function clearSpotlight() {
+    const hole = document.getElementById('tour-spotlight-hole');
+    hole.setAttribute('width', '0');
+    hole.setAttribute('height', '0');
+  }
+
+  function positionTooltip(el, caretPos, pad = 8) {
+    const frame    = document.querySelector('.device-frame');
+    const frameRect = frame.getBoundingClientRect();
+    const elRect   = el.getBoundingClientRect();
+    const tooltip  = document.getElementById('tour-tooltip');
+    const tooltipH = 192;
+    const margin   = 14;
+    const frameW   = frameRect.width;
+
+    const elTop    = elRect.top    - frameRect.top;
+    const elBottom = elRect.bottom - frameRect.top;
+    const elLeft   = elRect.left   - frameRect.left;
+
+    let top;
+    if (caretPos === 'top') {
+      top = elBottom + pad + 10;
+      // If tooltip would go below nav (bottom ~700px), flip above instead
+      if (top + tooltipH > frameRect.height - 90) {
+        top = elTop - pad - tooltipH - 10;
+        tooltip.className = 'caret-bottom entering';
+        setTimeout(() => tooltip.classList.remove('entering'), 420);
+      }
+    } else {
+      top = elTop - pad - tooltipH - 10;
+    }
+
+    const left = Math.max(margin, Math.min(elLeft, frameW - 268 - margin));
+    tooltip.style.top  = Math.max(margin, top) + 'px';
+    tooltip.style.left = left + 'px';
+
+    const caretX = Math.max(14, Math.min(elLeft - left + 16, 240));
+    tooltip.style.setProperty('--caret-x', caretX + 'px');
+  }
+
+  function tourNext() {
+    if (tourStep >= TOUR_STEPS.length - 1) {
+      endTour(true);
+    } else {
+      tourStep++;
+      navigateAndShow(tourStep);
+    }
+  }
+
+  function endTour(completed = false) {
+    tourActive = false;
+    clearSpotlight();
+    document.getElementById('tour-overlay').classList.remove('active');
+    sessionStorage.setItem('lumo-tour-done', '1');
+    // Return to home screen
+    goTo(1);
+    if (completed) {
+      const toast = document.getElementById('tour-done-toast');
+      toast.style.display = 'block';
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.style.display = 'none'; }, 380);
+      }, 2800);
+    }
+  }
+
+  document.getElementById('tour-spotlight-svg').addEventListener('click', function() {
+    if (tourActive) endTour(false);
+  });
+  document.getElementById('tour-tooltip').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+</script>      title: "Welcome to Lumo ✦",
       body: "This is your Daily Runway — a calm, AI-curated overview of everything that matters today for your upcoming exams.",
       caretPos: 'top',
       pad: 10,
