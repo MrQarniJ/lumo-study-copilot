@@ -1209,6 +1209,218 @@
   .nav-btn.active span { font-weight: 800; color: var(--brand-indigo); }
 
 
+  /* ===== Product Tour ===== */
+
+  /* Tour FAB — appears after splash */
+  #tour-fab {
+    position: absolute;
+    bottom: 100px;
+    right: 18px;
+    z-index: 8000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brand-indigo);
+    color: #FAF9F6;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 10px 16px 10px 12px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(36, 30, 78, 0.38), 0 1px 4px rgba(36, 30, 78, 0.18);
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.18s ease;
+    pointer-events: none;
+  }
+  #tour-fab.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+  #tour-fab.hidden { display: none; }
+  #tour-fab:active { transform: scale(0.95); }
+  #tour-fab:hover { box-shadow: 0 6px 20px rgba(36,30,78,0.44), 0 2px 6px rgba(36,30,78,0.2); }
+  #tour-fab svg { flex-shrink: 0; }
+  .tour-fab-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #6EE7B7;
+    flex-shrink: 0;
+    animation: tourFabPulse 2s ease-in-out infinite;
+  }
+  @keyframes tourFabPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  /* Tour Overlay — dim + spotlight */
+  #tour-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 8500;
+    pointer-events: all;
+  }
+  #tour-overlay.active { display: block; }
+
+  /* SVG spotlight mask */
+  #tour-spotlight-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* Tour Tooltip */
+  #tour-tooltip {
+    position: absolute;
+    z-index: 8600;
+    width: 268px;
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(17,14,34,0.18), 0 2px 8px rgba(17,14,34,0.08);
+    padding: 18px 18px 14px 18px;
+    pointer-events: all;
+    transition: top 0.35s cubic-bezier(0.16,1,0.3,1), left 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+  }
+  #tour-tooltip.entering {
+    animation: tooltipPop 0.38s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes tooltipPop {
+    from { opacity: 0; transform: scale(0.9) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .tour-step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent-violet-text);
+    background: var(--accent-violet-bg);
+    border: 1px solid var(--accent-violet-border);
+    border-radius: var(--radius-pill);
+    padding: 2px 9px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .tour-tooltip-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.25;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .tour-tooltip-body {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .tour-tooltip-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .tour-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .tour-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.22s, width 0.22s;
+  }
+  .tour-dot.active {
+    background: var(--brand-indigo);
+    width: 16px;
+    border-radius: var(--radius-pill);
+  }
+  .tour-btn-row { display: flex; gap: 8px; }
+  .tour-btn-skip {
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tour-btn-skip:hover { background: var(--bg-subtle); color: var(--text-secondary); }
+  .tour-btn-next {
+    padding: 8px 18px;
+    background: var(--brand-indigo);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #FAF9F6;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.12s;
+    flex: 1;
+  }
+  .tour-btn-next:hover { background: var(--brand-indigo-hover); }
+  .tour-btn-next:active { transform: scale(0.96); }
+
+  /* Tour caret arrow */
+  #tour-tooltip { --caret-x: 24px; }
+  #tour-tooltip::before {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    left: var(--caret-x);
+  }
+  #tour-tooltip.caret-top::before    { top: -6px; box-shadow: -2px -2px 4px rgba(17,14,34,0.06); }
+  #tour-tooltip.caret-bottom::before { bottom: -6px; box-shadow: 2px 2px 4px rgba(17,14,34,0.06); }
+
+  /* Tour done toast */
+  #tour-done-toast {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--brand-indigo);
+    color: #FAF9F6;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 11px 20px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+    z-index: 8700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    display: none;
+  }
+  #tour-done-toast.show {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Mobile adjustments for tour */
+  @media (max-width: 500px) {
+    #tour-fab { bottom: 88px; }
+    #tour-tooltip { width: calc(100vw - 36px); left: 18px !important; }
+    #tour-done-toast { bottom: 90px; }
+  }
+
   /* ===== Splash Screen ===== */
   #lumo-splash {
     position: absolute;
@@ -1333,6 +1545,43 @@
       </div>
     </div>
   </div>
+
+  <!-- ===== Tour FAB ===== -->
+  <button id="tour-fab" aria-label="Start tour" onclick="startTour()">
+    <div class="tour-fab-pulse"></div>
+    Take a Tour
+  </button>
+
+  <!-- ===== Tour Overlay ===== -->
+  <div id="tour-overlay">
+    <!-- SVG dim mask with spotlight cutout -->
+    <svg id="tour-spotlight-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <mask id="tour-mask">
+          <rect width="100%" height="100%" fill="white"/>
+          <rect id="tour-spotlight-hole" x="0" y="0" width="0" height="0" rx="12" fill="black"/>
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="rgba(17,14,34,0.55)" mask="url(#tour-mask)"/>
+    </svg>
+
+    <!-- Tooltip -->
+    <div id="tour-tooltip" class="caret-top entering">
+      <div class="tour-step-badge" id="tour-badge">Step 1 of 5</div>
+      <div class="tour-tooltip-title" id="tour-title">Welcome to Lumo ✦</div>
+      <div class="tour-tooltip-body" id="tour-body">Your AI-powered study copilot. Let's show you how it works in 30 seconds.</div>
+      <div class="tour-tooltip-footer">
+        <div class="tour-dots" id="tour-dots"></div>
+        <div class="tour-btn-row">
+          <button class="tour-btn-skip" onclick="endTour()">Skip</button>
+          <button class="tour-btn-next" id="tour-next-btn" onclick="tourNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tour done toast -->
+  <div id="tour-done-toast">🎉 You're all set! Happy studying.</div>
 
   <!-- iPhone Status Bar -->
   <div class="status-bar">
@@ -2239,13 +2488,21 @@
 
   // Hash router for direct screen captures + Splash dismissal
   window.addEventListener('DOMContentLoaded', () => {
-    // --- Splash screen ---
+    // --- Splash screen + FAB reveal ---
     const splash = document.getElementById('lumo-splash');
     if (splash) {
-      // Start fade after 1.9s (logo has time to breathe), transition is 0.55s
       setTimeout(() => {
         splash.classList.add('fade-out');
-        setTimeout(() => { splash.classList.add('hidden'); }, 600);
+        setTimeout(() => {
+          splash.classList.add('hidden');
+          // Show tour FAB after splash is gone (only on first visit)
+          if (!sessionStorage.getItem('lumo-tour-done')) {
+            const fab = document.getElementById('tour-fab');
+            if (fab) {
+              setTimeout(() => fab.classList.add('visible'), 300);
+            }
+          }
+        }, 600);
       }, 1900);
     }
 
@@ -2271,6 +2528,212 @@
       animateHomeReadiness();
     }
   });
+
+  // ============================================================
+  // LUMO PRODUCT TOUR ENGINE
+  // ============================================================
+
+  const TOUR_STEPS = [
+    {
+      target: '.screen-top-bar',         // "Today's Runway" heading area
+      title: "Welcome to Lumo ✦",
+      body: "This is your Daily Runway — a calm, AI-curated overview of everything that matters today for your upcoming exams.",
+      caretPos: 'top',
+      pad: 10,
+    },
+    {
+      target: '.course-switcher-bar',     // Course pills
+      title: "Switch Courses Instantly",
+      body: "Tap any course pill to pivot your entire dashboard — readiness score, study plan, and weak spots update in real time.",
+      caretPos: 'top',
+      pad: 8,
+    },
+    {
+      target: '.hero-banner-simple',      // AI readiness banner
+      title: "Your AI Readiness Score",
+      body: "Lumo reads your study history and calculates exactly how prepared you are. The progress bar and weak spots are updated after every session.",
+      caretPos: 'top',
+      pad: 8,
+    },
+    {
+      target: '#task-step-1',             // First task row
+      title: "Today's Study Plan",
+      body: "Three focused tasks, optimised by spaced-repetition AI. Tap a task to complete it — your time remaining updates live.",
+      caretPos: 'top',
+      pad: 8,
+    },
+    {
+      target: '.bottom-nav-clean',        // Bottom navigation
+      title: "Navigate in One Tap",
+      body: "Home, Flashcards, Analysis, and Profile — everything you need is one tap away. You're all set to start studying! 🎓",
+      caretPos: 'bottom',
+      pad: 8,
+    },
+  ];
+
+  let tourStep = 0;
+  let tourActive = false;
+
+  function startTour() {
+    tourActive = true;
+    tourStep = 0;
+    // Hide FAB
+    const fab = document.getElementById('tour-fab');
+    if (fab) { fab.classList.remove('visible'); fab.classList.add('hidden'); }
+    // Make sure we're on screen 1
+    goTo(1);
+    // Build dots
+    buildTourDots();
+    // Show overlay
+    document.getElementById('tour-overlay').classList.add('active');
+    // Show step
+    setTimeout(() => showTourStep(0), 80);
+  }
+
+  function buildTourDots() {
+    const container = document.getElementById('tour-dots');
+    container.innerHTML = '';
+    TOUR_STEPS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'tour-dot' + (i === 0 ? ' active' : '');
+      container.appendChild(d);
+    });
+  }
+
+  function updateTourDots(step) {
+    document.querySelectorAll('.tour-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === step);
+    });
+  }
+
+  function showTourStep(idx) {
+    const step = TOUR_STEPS[idx];
+    if (!step) return;
+
+    // Find target element — search within device-frame
+    const frame = document.querySelector('.device-frame');
+    const el = frame ? frame.querySelector(step.target) : document.querySelector(step.target);
+
+    // Update tooltip content
+    document.getElementById('tour-badge').textContent = `Step ${idx + 1} of ${TOUR_STEPS.length}`;
+    document.getElementById('tour-title').textContent = step.title;
+    document.getElementById('tour-body').textContent = step.body;
+
+    const nextBtn = document.getElementById('tour-next-btn');
+    nextBtn.textContent = idx === TOUR_STEPS.length - 1 ? 'Done ✓' : 'Next →';
+
+    updateTourDots(idx);
+
+    // Animate spotlight + tooltip
+    const tooltip = document.getElementById('tour-tooltip');
+    tooltip.className = 'caret-' + step.caretPos + ' entering';
+    setTimeout(() => tooltip.classList.remove('entering'), 400);
+
+    if (el) {
+      positionSpotlight(el, step.pad);
+      positionTooltip(el, step.caretPos, step.pad);
+    } else {
+      // Fallback: center spotlight
+      clearSpotlight();
+    }
+  }
+
+  function positionSpotlight(el, pad = 8) {
+    const frame = document.querySelector('.device-frame');
+    const frameRect = frame.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+
+    // Coordinates relative to device-frame
+    const x = elRect.left - frameRect.left - pad;
+    const y = elRect.top - frameRect.top - pad;
+    const w = elRect.width + pad * 2;
+    const h = elRect.height + pad * 2;
+
+    const hole = document.getElementById('tour-spotlight-hole');
+    hole.setAttribute('x', Math.max(0, x));
+    hole.setAttribute('y', Math.max(0, y));
+    hole.setAttribute('width', w);
+    hole.setAttribute('height', h);
+    hole.setAttribute('rx', '12');
+  }
+
+  function clearSpotlight() {
+    const hole = document.getElementById('tour-spotlight-hole');
+    hole.setAttribute('width', '0');
+    hole.setAttribute('height', '0');
+  }
+
+  function positionTooltip(el, caretPos, pad = 8) {
+    const frame = document.querySelector('.device-frame');
+    const frameRect = frame.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const tooltip = document.getElementById('tour-tooltip');
+    const tooltipH = 180; // approx
+    const margin = 12;
+
+    // Relative to frame
+    const elTop    = elRect.top - frameRect.top;
+    const elBottom = elRect.bottom - frameRect.top;
+    const elLeft   = elRect.left - frameRect.left;
+    const frameW   = frameRect.width;
+
+    let top, left;
+
+    if (caretPos === 'top') {
+      // Tooltip below the element
+      top = elBottom + pad + 10;
+    } else {
+      // Tooltip above the element (bottom nav)
+      top = elTop - pad - tooltipH - 10;
+    }
+
+    // Horizontal: try to align left-ish, keep inside frame
+    left = Math.max(margin, Math.min(elLeft, frameW - 268 - margin));
+
+    tooltip.style.top  = top + 'px';
+    tooltip.style.left = left + 'px';
+
+    // Caret X position inside tooltip
+    const caretX = Math.max(14, Math.min(elLeft - left + 14, 240));
+    tooltip.style.setProperty('--caret-x', caretX + 'px');
+  }
+
+  function tourNext() {
+    if (tourStep >= TOUR_STEPS.length - 1) {
+      endTour(true);
+    } else {
+      tourStep++;
+      showTourStep(tourStep);
+    }
+  }
+
+  function endTour(completed = false) {
+    tourActive = false;
+    clearSpotlight();
+    document.getElementById('tour-overlay').classList.remove('active');
+    sessionStorage.setItem('lumo-tour-done', '1');
+
+    if (completed) {
+      // Show done toast
+      const toast = document.getElementById('tour-done-toast');
+      toast.style.display = 'block';
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.style.display = 'none'; }, 350);
+      }, 2800);
+    }
+  }
+
+  // Allow tapping the dim area to skip
+  document.getElementById('tour-spotlight-svg').addEventListener('click', function(e) {
+    if (tourActive) endTour(false);
+  });
+  // But don't skip when tapping tooltip
+  document.getElementById('tour-tooltip').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
 </script>
 
 
