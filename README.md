@@ -8,11 +8,9 @@
 
 ---
 
-## 🔗 Live Application Links
+## 🔗 Live Application Link
 
 - **Live Production App**: **[https://lumo-study-copilot.vercel.app](https://lumo-study-copilot.vercel.app)**
-- **GitHub Repository**: **[https://github.com/loftvoxelstudio-cmd/lumo-study-copilot](https://github.com/loftvoxelstudio-cmd/lumo-study-copilot)**
-
 ---
 
 ## 📱 Product Architecture
