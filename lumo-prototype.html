@@ -1209,246 +1209,230 @@
   .nav-btn.active span { font-weight: 800; color: var(--brand-indigo); }
 
 
-  /* ===== Product Tour ===== */
+  /* ===== Product Tour v3 — Bottom Sheet + Glow Ring ===== */
 
-  /* Tour inline banner — lives inside screen-1 content, no overlap */
+  /* Inline banner inside screen-1 (no overlap with nav) */
   #tour-banner {
     display: none;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
-    background: var(--brand-indigo);
+    background: linear-gradient(135deg, #2D2560 0%, #241E4E 100%);
+    border: 1px solid rgba(99,102,241,0.3);
     border-radius: var(--radius-md);
     padding: 12px 14px;
     margin-bottom: 14px;
     opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transform: translateY(-8px);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
   }
-  #tour-banner.visible {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  #tour-banner.hidden { display: none !important; }
-  .tour-banner-left {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    flex: 1;
-    min-width: 0;
-  }
+  #tour-banner.visible { display: flex; opacity: 1; transform: translateY(0); }
+  #tour-banner.hidden  { display: none !important; }
   .tour-banner-pulse {
     width: 8px; height: 8px; border-radius: 50%;
-    background: #6EE7B7;
-    flex-shrink: 0;
-    animation: tourFabPulse 2s ease-in-out infinite;
+    background: #6EE7B7; flex-shrink: 0;
+    animation: tourPulse 2s ease-in-out infinite;
   }
-  @keyframes tourFabPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.5; transform: scale(0.7); }
+  @keyframes tourPulse {
+    0%,100% { opacity:1; transform:scale(1);   box-shadow: 0 0 0 0 rgba(110,231,183,0.5); }
+    50%     { opacity:1; transform:scale(1);   box-shadow: 0 0 0 5px rgba(110,231,183,0); }
   }
   .tour-banner-text {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(250,249,246,0.82);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex:1; font-size:13px; font-weight:600;
+    color: rgba(250,249,246,0.8);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   }
-  .tour-banner-text strong {
-    color: #FAF9F6;
-    font-weight: 800;
-  }
+  .tour-banner-text strong { color:#FAF9F6; font-weight:800; }
   .tour-banner-btn {
-    flex-shrink: 0;
-    background: rgba(250,249,246,0.14);
-    border: 1px solid rgba(250,249,246,0.22);
+    flex-shrink:0;
+    background: rgba(250,249,246,0.12);
+    border: 1px solid rgba(250,249,246,0.2);
     border-radius: var(--radius-pill);
     padding: 6px 14px;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    color: #FAF9F6;
-    cursor: pointer;
-    transition: background 0.15s;
+    font-family:"Plus Jakarta Sans",sans-serif; font-size:12px; font-weight:700;
+    color:#FAF9F6; cursor:pointer; transition:background 0.15s;
   }
-  .tour-banner-btn:hover { background: rgba(250,249,246,0.22); }
-  .tour-banner-btn:active { transform: scale(0.96); }
+  .tour-banner-btn:active { transform:scale(0.95); }
   .tour-banner-dismiss {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    color: rgba(250,249,246,0.45);
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 2px 4px;
+    flex-shrink:0; background:none; border:none;
+    color:rgba(250,249,246,0.4); font-size:17px; cursor:pointer; padding:0 2px;
+    line-height:1;
   }
 
-  /* Tour Overlay — dim + spotlight */
-  #tour-overlay {
+  /* ── Full-frame dim layer ── */
+  #tour-dim {
     display: none;
     position: absolute;
     inset: 0;
-    z-index: 8500;
+    background: rgba(10, 8, 24, 0.72);
+    z-index: 8400;
     pointer-events: all;
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+    transition: opacity 0.3s ease;
   }
-  #tour-overlay.active { display: block; }
+  #tour-dim.active { display: block; }
 
-  /* SVG spotlight mask */
-  #tour-spotlight-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
+  /* ── Glow ring on highlighted element ── */
+  .tour-highlight {
+    position: relative;
+    z-index: 8450 !important;
+    border-radius: 12px;
+    outline: 2.5px solid rgba(99,102,241,0.9);
+    outline-offset: 4px;
+    box-shadow:
+      0 0 0 6px rgba(99,102,241,0.18),
+      0 0 24px 6px rgba(99,102,241,0.22),
+      0 0 48px 12px rgba(99,102,241,0.1);
+    animation: tourGlow 2s ease-in-out infinite;
+  }
+  @keyframes tourGlow {
+    0%,100% { box-shadow: 0 0 0 6px rgba(99,102,241,0.18), 0 0 24px 6px rgba(99,102,241,0.22), 0 0 48px 12px rgba(99,102,241,0.10); }
+    50%     { box-shadow: 0 0 0 8px rgba(99,102,241,0.24), 0 0 32px 8px rgba(99,102,241,0.30), 0 0 60px 16px rgba(99,102,241,0.14); }
   }
 
-  /* Tour Tooltip */
-  #tour-tooltip {
+  /* ── Bottom sheet card ── */
+  #tour-sheet {
+    display: none;
     position: absolute;
+    bottom: 0; left: 0; right: 0;
     z-index: 8600;
-    width: 268px;
     background: #FFFFFF;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 8px 32px rgba(17,14,34,0.18), 0 2px 8px rgba(17,14,34,0.08);
-    padding: 18px 18px 14px 18px;
+    border-radius: 20px 20px 0 0;
+    padding: 0 20px 28px;
+    box-shadow: 0 -4px 32px rgba(17,14,34,0.18), 0 -1px 6px rgba(17,14,34,0.08);
     pointer-events: all;
-    transition: top 0.35s cubic-bezier(0.16,1,0.3,1), left 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
   }
-  #tour-tooltip.entering {
-    animation: tooltipPop 0.38s cubic-bezier(0.16,1,0.3,1) forwards;
+  #tour-sheet.open {
+    display: block;
+    transform: translateY(0);
   }
-  @keyframes tooltipPop {
-    from { opacity: 0; transform: scale(0.9) translateY(6px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
+  #tour-sheet.slide-in {
+    animation: sheetSlideIn 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
   }
-  .tour-step-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--accent-violet-text);
+  @keyframes sheetSlideIn {
+    from { transform: translateY(100%); opacity: 0.6; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* Sheet drag handle */
+  .tour-sheet-handle {
+    width: 36px; height: 4px;
+    background: #E8E4DA;
+    border-radius: 2px;
+    margin: 12px auto 20px;
+  }
+
+  /* Step icon */
+  .tour-sheet-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
     background: var(--accent-violet-bg);
     border: 1px solid var(--accent-violet-border);
-    border-radius: var(--radius-pill);
-    padding: 2px 9px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-size: 20px;
+    flex-shrink: 0;
   }
-  .tour-tooltip-title {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--text-primary);
-    line-height: 1.25;
-    margin-bottom: 6px;
-    letter-spacing: -0.02em;
-  }
-  .tour-tooltip-body {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    line-height: 1.55;
-    margin-bottom: 16px;
-  }
-  .tour-tooltip-footer {
-    display: flex;
-    align-items: center;
+
+  /* Step counter row */
+  .tour-sheet-meta {
+    display: flex; align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    margin-bottom: 6px;
   }
-  .tour-dots {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+  .tour-sheet-counter {
+    font-size: 11px; font-weight: 700;
+    color: var(--accent-violet-text);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
+  .tour-sheet-skip {
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    background: none; border: none; cursor: pointer; padding: 0;
+    transition: color 0.15s;
+  }
+  .tour-sheet-skip:hover { color: var(--text-secondary); }
+
+  /* Progress bar */
+  .tour-progress-track {
+    height: 3px;
+    background: var(--border-light);
+    border-radius: 2px;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .tour-progress-fill {
+    height: 100%;
+    background: var(--accent-violet);
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .tour-sheet-title {
+    font-size: 18px; font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.025em; line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .tour-sheet-body {
+    font-size: 13.5px; font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* Dot + button row */
+  .tour-sheet-footer {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 12px;
+  }
+  .tour-dots { display: flex; gap: 5px; align-items: center; }
   .tour-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--border);
-    transition: background 0.22s, width 0.22s;
+    transition: background 0.22s, width 0.28s cubic-bezier(0.16,1,0.3,1);
   }
   .tour-dot.active {
     background: var(--brand-indigo);
-    width: 16px;
-    border-radius: var(--radius-pill);
+    width: 20px; border-radius: 3px;
   }
-  .tour-btn-row { display: flex; gap: 8px; }
-  .tour-btn-skip {
-    padding: 8px 12px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .tour-btn-skip:hover { background: var(--bg-subtle); color: var(--text-secondary); }
-  .tour-btn-next {
-    padding: 8px 18px;
-    background: var(--brand-indigo);
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #FAF9F6;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.12s;
+  .tour-sheet-next {
     flex: 1;
-  }
-  .tour-btn-next:hover { background: var(--brand-indigo-hover); }
-  .tour-btn-next:active { transform: scale(0.96); }
-
-  /* Tour caret arrow */
-  #tour-tooltip { --caret-x: 24px; }
-  #tour-tooltip::before {
-    content: '';
-    position: absolute;
-    width: 12px; height: 12px;
-    background: #FFFFFF;
-    border-radius: 2px;
-    transform: rotate(45deg);
-    left: var(--caret-x);
-  }
-  #tour-tooltip.caret-top::before    { top: -6px; box-shadow: -2px -2px 4px rgba(17,14,34,0.06); }
-  #tour-tooltip.caret-bottom::before { bottom: -6px; box-shadow: 2px 2px 4px rgba(17,14,34,0.06); }
-
-  /* Tour done toast */
-  #tour-done-toast {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
+    padding: 13px 20px;
     background: var(--brand-indigo);
-    color: #FAF9F6;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 11px 20px;
-    border-radius: var(--radius-pill);
-    white-space: nowrap;
-    z-index: 8700;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
-    display: none;
+    border: none; border-radius: 12px;
+    font-family: "Plus Jakarta Sans",sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: #FAF9F6; cursor: pointer;
+    transition: background 0.15s, transform 0.12s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .tour-sheet-next:hover  { background: var(--brand-indigo-hover); }
+  .tour-sheet-next:active { transform: scale(0.97); }
+
+  /* Done toast */
+  #tour-done-toast {
+    position: absolute; bottom: 96px; left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: #059669; color: #fff;
+    font-family: "Plus Jakarta Sans",sans-serif;
+    font-size: 13px; font-weight: 700;
+    padding: 11px 20px; border-radius: var(--radius-pill);
+    white-space: nowrap; z-index: 9000;
+    opacity: 0; pointer-events: none; display: none;
+    transition: opacity 0.3s, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 4px 16px rgba(5,150,105,0.3);
   }
   #tour-done-toast.show {
-    display: block;
-    opacity: 1;
+    display: block; opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Mobile adjustments for tour */
-  @media (max-width: 500px) {
-    #tour-tooltip { width: calc(100vw - 32px); left: 16px !important; }
+  @media (max-width:500px) {
+    #tour-sheet { border-radius: 16px 16px 0 0; }
     #tour-done-toast { bottom: 90px; }
   }
 
@@ -1577,36 +1561,31 @@
     </div>
   </div>
 
-  <!-- ===== Tour Overlay ===== -->
-  <div id="tour-overlay">
-    <!-- SVG dim mask with spotlight cutout -->
-    <svg id="tour-spotlight-svg" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <mask id="tour-mask">
-          <rect width="100%" height="100%" fill="white"/>
-          <rect id="tour-spotlight-hole" x="0" y="0" width="0" height="0" rx="12" fill="black"/>
-        </mask>
-      </defs>
-      <rect width="100%" height="100%" fill="rgba(17,14,34,0.55)" mask="url(#tour-mask)"/>
-    </svg>
+  <!-- ===== Tour: dim layer + bottom sheet ===== -->
+  <div id="tour-dim"></div>
 
-    <!-- Tooltip -->
-    <div id="tour-tooltip" class="caret-top entering">
-      <div class="tour-step-badge" id="tour-badge">Step 1 of 5</div>
-      <div class="tour-tooltip-title" id="tour-title">Welcome to Lumo ✦</div>
-      <div class="tour-tooltip-body" id="tour-body">Your AI-powered study copilot. Let's show you how it works in 30 seconds.</div>
-      <div class="tour-tooltip-footer">
-        <div class="tour-dots" id="tour-dots"></div>
-        <div class="tour-btn-row">
-          <button class="tour-btn-skip" onclick="endTour()">Skip</button>
-          <button class="tour-btn-next" id="tour-next-btn" onclick="tourNext()">Next →</button>
-        </div>
-      </div>
+  <div id="tour-sheet">
+    <div class="tour-sheet-handle"></div>
+    <div class="tour-sheet-meta">
+      <span class="tour-sheet-counter" id="tour-counter">1 of 6</span>
+      <button class="tour-sheet-skip" onclick="endTour(false)">Skip tour</button>
+    </div>
+    <div class="tour-progress-track">
+      <div class="tour-progress-fill" id="tour-progress"></div>
+    </div>
+    <div class="tour-sheet-icon" id="tour-icon">🏠</div>
+    <div class="tour-sheet-title" id="tour-title">Welcome to Lumo</div>
+    <div class="tour-sheet-body"  id="tour-body">Your AI study copilot.</div>
+    <div class="tour-sheet-footer">
+      <div class="tour-dots" id="tour-dots"></div>
+      <button class="tour-sheet-next" id="tour-next-btn" onclick="tourNext()">
+        Next <span>→</span>
+      </button>
     </div>
   </div>
 
   <!-- Tour done toast -->
-  <div id="tour-done-toast">🎉 You're all set! Happy studying.</div>
+  <div id="tour-done-toast">🎓 You're all set — happy studying!</div>
 
   <!-- iPhone Status Bar -->
   <div class="status-bar">
@@ -1628,10 +1607,8 @@
 
       <!-- Tour inline banner — no overlap with nav -->
       <div id="tour-banner">
-        <div class="tour-banner-left">
-          <div class="tour-banner-pulse"></div>
-          <span class="tour-banner-text"><strong>New here?</strong> See what Lumo can do</span>
-        </div>
+        <div class="tour-banner-pulse"></div>
+        <span class="tour-banner-text"><strong>New here?</strong> See what Lumo can do</span>
         <button class="tour-banner-btn" onclick="startTour()">Take Tour</button>
         <button class="tour-banner-dismiss" onclick="dismissTourBanner()" aria-label="Dismiss">×</button>
       </div>
@@ -2561,8 +2538,220 @@
   });
 
   // ============================================================
-  // LUMO PRODUCT TOUR ENGINE  v2  — multi-screen, no overlap
+  // LUMO PRODUCT TOUR  v3 — bottom sheet + glow ring highlight
   // ============================================================
+
+  const TOUR_STEPS = [
+    {
+      screen: 1,
+      target: '.hero-banner-simple',
+      icon: '📊',
+      title: 'Your AI Readiness Score',
+      body: 'Lumo reads your study history and calculates exactly how prepared you are. It updates live after every session.',
+    },
+    {
+      screen: 1,
+      target: '.course-switcher-bar',
+      icon: '🎓',
+      title: 'Switch Courses Instantly',
+      body: 'Tap any course pill — your readiness score, study plan, and weak spots all switch in one tap.',
+    },
+    {
+      screen: 1,
+      target: '#task-step-1',
+      icon: '📋',
+      title: "Today's Study Plan",
+      body: 'Three AI-curated tasks, ordered by impact. Tap a task to complete it — your countdown updates live.',
+    },
+    {
+      screen: 3,
+      target: '.flip-card-stage',
+      icon: '🃏',
+      title: 'Active Recall Flashcards',
+      body: 'Tap to flip the card. Rate yourself Again, Hard, Good, or Easy — the FSRS algorithm reschedules it perfectly.',
+    },
+    {
+      screen: 6,
+      target: '.screen-top-bar',
+      icon: '📈',
+      title: 'Deep Analysis Dashboard',
+      body: 'See your recall rate chart, weak topics, and mastery per course. Lumo pinpoints exactly what to study next.',
+    },
+    {
+      screen: 7,
+      target: '.avatar-circle',
+      icon: '👤',
+      title: 'Your Study Profile',
+      body: 'Track your streak, total cards studied, hours logged, and mastery per course — all in one clean view.',
+    },
+  ];
+
+  let tourStep   = 0;
+  let tourActive = false;
+  let _tourHighlightEl = null;
+
+  /* ── Banner ── */
+  function showTourBanner() {
+    if (sessionStorage.getItem('lumo-tour-done')) return;
+    const b = document.getElementById('tour-banner');
+    if (!b) return;
+    b.style.display = 'flex';
+    requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('visible')));
+  }
+
+  function dismissTourBanner() {
+    const b = document.getElementById('tour-banner');
+    if (!b) return;
+    b.classList.remove('visible');
+    setTimeout(() => b.classList.add('hidden'), 420);
+    sessionStorage.setItem('lumo-tour-done', '1');
+  }
+
+  /* ── Start ── */
+  function startTour() {
+    tourActive = true;
+    tourStep   = 0;
+    dismissTourBanner();
+    _buildDots();
+    navigateAndShow(0);
+  }
+
+  function _buildDots() {
+    const c = document.getElementById('tour-dots');
+    if (!c) return;
+    c.innerHTML = '';
+    TOUR_STEPS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'tour-dot' + (i === 0 ? ' active' : '');
+      c.appendChild(d);
+    });
+  }
+
+  function _updateDots(idx) {
+    document.querySelectorAll('.tour-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === idx));
+  }
+
+  /* ── Navigate then highlight ── */
+  function navigateAndShow(idx) {
+    const step = TOUR_STEPS[idx];
+    if (!step) return;
+    // navigate
+    goTo(step.screen);
+    // scroll highlight target into view after render
+    setTimeout(() => _applyStep(idx), 180);
+  }
+
+  function _applyStep(idx) {
+    const step = TOUR_STEPS[idx];
+    const frame = document.querySelector('.device-frame');
+
+    // Clear previous highlight
+    _clearHighlight();
+
+    // Find target
+    const selectors = step.target.split(',').map(s => s.trim());
+    let el = null;
+    for (const sel of selectors) {
+      el = frame ? frame.querySelector(sel) : document.querySelector(sel);
+      if (el) break;
+    }
+
+    // Scroll target into view (within its .screen container)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add glow ring
+      setTimeout(() => {
+        el.classList.add('tour-highlight');
+        _tourHighlightEl = el;
+      }, 120);
+    }
+
+    // Show dim
+    document.getElementById('tour-dim').classList.add('active');
+
+    // Update sheet content
+    document.getElementById('tour-counter').textContent = `${idx + 1} of ${TOUR_STEPS.length}`;
+    document.getElementById('tour-icon').textContent    = step.icon;
+    document.getElementById('tour-title').textContent   = step.title;
+    document.getElementById('tour-body').textContent    = step.body;
+    document.getElementById('tour-progress').style.width =
+      `${((idx + 1) / TOUR_STEPS.length) * 100}%`;
+    const btn = document.getElementById('tour-next-btn');
+    btn.innerHTML = idx === TOUR_STEPS.length - 1
+      ? 'Finish 🎓'
+      : 'Next <span>→</span>';
+
+    _updateDots(idx);
+
+    // Open / animate sheet
+    const sheet = document.getElementById('tour-sheet');
+    sheet.classList.remove('slide-in');
+    sheet.style.display = 'block';
+    // force reflow then slide in
+    void sheet.offsetHeight;
+    sheet.classList.add('open', 'slide-in');
+    setTimeout(() => sheet.classList.remove('slide-in'), 480);
+  }
+
+  function _clearHighlight() {
+    if (_tourHighlightEl) {
+      _tourHighlightEl.classList.remove('tour-highlight');
+      _tourHighlightEl = null;
+    }
+    // safety sweep
+    document.querySelectorAll('.tour-highlight').forEach(el =>
+      el.classList.remove('tour-highlight'));
+  }
+
+  /* ── Next / End ── */
+  function tourNext() {
+    if (tourStep >= TOUR_STEPS.length - 1) {
+      endTour(true);
+    } else {
+      tourStep++;
+      navigateAndShow(tourStep);
+    }
+  }
+
+  function endTour(completed = false) {
+    tourActive = false;
+    _clearHighlight();
+
+    // Hide dim
+    document.getElementById('tour-dim').classList.remove('active');
+
+    // Slide sheet out
+    const sheet = document.getElementById('tour-sheet');
+    sheet.style.transform = 'translateY(100%)';
+    sheet.style.transition = 'transform 0.32s cubic-bezier(0.4,0,1,1)';
+    setTimeout(() => {
+      sheet.classList.remove('open');
+      sheet.style.transform = '';
+      sheet.style.transition = '';
+      sheet.style.display = 'none';
+    }, 340);
+
+    sessionStorage.setItem('lumo-tour-done', '1');
+    goTo(1);
+
+    if (completed) {
+      const toast = document.getElementById('tour-done-toast');
+      toast.style.display = 'block';
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.style.display = 'none'; }, 380);
+      }, 2800);
+    }
+  }
+
+  // Tap dim area = skip
+  document.getElementById('tour-dim').addEventListener('click', () => {
+    if (tourActive) endTour(false);
+  });
+
+</script>
 
   // Each step: screen to navigate to, element to spotlight, tooltip content
   const TOUR_STEPS = [
